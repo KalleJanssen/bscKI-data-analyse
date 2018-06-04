@@ -197,21 +197,25 @@ def retrieve_data():
             'score_citation',
             'score_industry',
             'score_int_outlook']
-    df[cols] = df[cols].apply(pd.to_numeric, errors='coerce')
+    df[cols] = df[cols].apply(pd.to_numeric, errors='coerce') 
+
     # saves data-frame as a comma separated values file
     df.to_csv('university_ranking.csv')
 
-
 def main():
+
     retrieve_data()
 
     # reads df from file
     df = pd.read_csv('university_ranking.csv', index_col=0)
 
+    # fills missing data with stuff
     df = male_female_fill(df)
     df = score_industry_fill(df)
     df = score_overall_fill(df)
 
+    print(df.isnull().sum())   
+    
     df.to_csv('university_ranking.csv')
 
 
