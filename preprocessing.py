@@ -1,8 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import urllib.request
-import ast
-import time
 import pandas as pd
 import numpy as np
 from selenium import webdriver
@@ -11,7 +8,8 @@ from selenium import webdriver
 def main():
 
     datapoints = []
-    browser = webdriver.Chrome(executable_path='chromedriver.exe')
+
+    browser = webdriver.Chrome()
 
     for j in range(6, 9):
         url = ('https://www.timeshighereducation.com/world-university-rankings/201'
@@ -26,7 +24,12 @@ def main():
             cells = table_row.findAll('td')
             if len(cells) > 0:
                 ranking = i
-                name_country = cells[1]
+
+                try:
+                    name_country = cells[1]
+                except:
+                    pass
+
                 name_country = name_country.select('a')
                 university = name_country[0].text.strip()
                 country = name_country[1].text.strip()
@@ -52,9 +55,9 @@ def main():
         'pct_intl_student',
         'fem_mal_ratio',
         'year'])
+    
 
     df.to_csv('university_ranking.csv')
-
 
 
 if __name__ == "__main__":
