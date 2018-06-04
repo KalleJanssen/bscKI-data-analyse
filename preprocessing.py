@@ -1,9 +1,101 @@
-from bs4 import BeautifulSoup
 import pandas as pd
+import numpy as np
+from bs4 import BeautifulSoup
 from selenium import webdriver
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
 
 
-def main():
+def male_female(df, ):
+
+  # columns of interest for predicting male female split
+  coi = ['no_student', 
+         'year',
+         'score_teaching', 
+         'score_research', 
+         'score_citation', 
+         'score_int_outlook']
+
+
+  # all rows that are not null in male column
+  notnans = df['male'].notnull()
+  df_notnans = df[notnans]
+
+  # split data into features and labels
+  x = df_notnans[coi]
+  y = df_notnans['male']
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25)
+  # the classifier we use
+  clf = LinearRegression()
+  # trains classifier
+  clf.fit(x_train, y_train)
+  # test classifier
+  print("male: ", clf.score(x_test, y_test))
+  # all rows that are null in dataframe
+  df_nans = df.loc[~notnans].copy()
+
+  # predicts values for male and adds to dataframe
+  df_nans['male'] = clf.predict(df_nans[coi])
+  df.male.fillna(df_nans.male,inplace=True)
+
+  # converts male column to integer type
+  df['male'] = df['male'].astype('int64')
+  # calculates female percentage of students
+  df['female'] = 100 - df['male']
+
+  return df
+
+def score_industry(df):
+
+  coi = ['score_teaching',
+       'score_research',
+       'score_citation',
+       'score_int_outlook',
+       ]
+
+  notnans = df['score_industry'].notnull()
+  df_notnans = df[notnans]
+
+  x = df_notnans[coi]
+  y = df_notnans['score_industry']
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25)
+  clf = LinearRegression()
+  clf.fit(x_train, y_train)
+  print("score_industry: ", clf.score(x_test, y_test))
+  df_nans = df.loc[~notnans].copy()
+  df_nans['score_industry'] = clf.predict(df_nans[coi])
+  df.score_industry.fillna(df_nans.score_industry,inplace=True)
+
+  return df
+
+def score_overall(df):
+
+  coi = ['score_teaching',
+       'score_research',
+       'score_citation',
+       'score_industry',
+       'score_int_outlook',
+       ]
+
+  notnans = df['score_overall'].notnull()
+  df_notnans = df[notnans]
+
+  x = df_notnans[coi]
+  y = df_notnans['score_overall']
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25)
+
+  clf = LinearRegression()
+  clf.fit(x_train, y_train)
+  print("score_overall: ", clf.score(x_test, y_test))
+  df_nans = df.loc[~notnans].copy()
+  df_nans['score_overall'] = clf.predict(df_nans[coi])
+  df.score_overall.fillna(df_nans.score_overall,inplace=True)
+
+  return df
+
+
+
+def retrieve_data():
   
     stats = []
     scores = []
@@ -104,8 +196,29 @@ def main():
 
     df[['male', 'female']] = df.pop('fem_mal_ratio').str.split(' : ', expand=True)
     df['no_student'] = df['no_student'].str.strip('" ').str.replace(',', '').astype(int)
-
+    cols = ['score_overall',
+            'score_teaching',
+            'score_research',
+            'score_citation',
+            'score_industry',
+            'score_int_outlook']
+    df[cols] = df[cols].apply(pd.to_numeric, errors='coerce')
     # saves data-frame as a comma separated values file
+    df.to_csv('university_ranking.csv')
+
+
+def main():
+
+
+    retrieve_data()
+
+    # reads df from file
+    df = pd.read_csv('university_ranking.csv', index_col=0)  
+
+    df = male_female(df)
+    df = score_industry(df)
+    df = score_overall(df)
+
     df.to_csv('university_ranking.csv')
 
 
