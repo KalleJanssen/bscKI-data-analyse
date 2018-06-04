@@ -38,6 +38,7 @@ Thumbs.db
 *.tar
 *.zip
 *.exe
+.idea
 
 # Windows Installer files
 *.cab
