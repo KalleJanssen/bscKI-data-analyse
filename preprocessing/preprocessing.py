@@ -116,34 +116,26 @@ def retrieve_data():
             'score_int_outlook']
     df[cols] = df[cols].apply(pd.to_numeric, errors='coerce')
 
-    # rewrites everything as a decimal point instead of percentage, adds zeros for missing datapoints
-
-
     # saves data-frame as a comma separated values file
     df.to_csv('university_ranking_unf.csv')
 
 
 def main():
 
-    #retrieve_data()
+    # if university_ranking_unf.csv is empty, use this.
+    # retrieve_data()
 
     # reads df from file
     df = pd.read_csv('../university_ranking_unf.csv', index_col=0)
-
-    # prints missing values and what columns they are missing from
-    print(df.isnull().sum())
-
-    # fills missing data with stuff
-    df = fill.male_female_fill(df)
-    df = fill.score_industry_fill(df)
-    df = fill.score_overall_fill(df)
-
-    df['pct_intl_student'] = df['pct_intl_student'].str.replace(r'%', r'.0').astype('float') / 100.0
-    df['pct_intl_student'] = df['pct_intl_student'].fillna(0)
     
-    # prints missing values and what columns they are missing from
-    print(df.isnull().sum())
-
+    # fills missing data with proper data using ml and means
+    df = fill.male_female_fill(df)
+    df = fill.pct_intl_student_fill(df)
+    df = fill.score_overall_fill(df)
+    df = fill.score_industry_fill(df)
+    
+    print(df.info())
+    
     df.to_csv('../university_ranking.csv')
     df.to_json('../university_ranking.json')
 
