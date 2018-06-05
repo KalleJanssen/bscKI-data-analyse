@@ -2,6 +2,7 @@ import pandas as pd
 import fill
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import time
 
 
 def retrieve_data():
@@ -17,6 +18,7 @@ def retrieve_data():
         url = ('https://www.timeshighereducation.com/world-university-rankings/201'
                + str(j) + '/world-ranking#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/stats')
         browser.get(url)
+        time.sleep(3)
         # converts html file into soup
         soup = BeautifulSoup(browser.page_source, 'html.parser')
         # find relevant table
@@ -27,6 +29,7 @@ def retrieve_data():
         for table_row in table.select('tr'):
             cells = table_row.findAll('td')
             if len(cells) > 0:
+                
                 ranking = i
 
                 name_country = cells[1]
@@ -53,6 +56,7 @@ def retrieve_data():
         url = ('https://www.timeshighereducation.com/world-university-rankings/201' +
                str(j) + '/world-ranking#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/scores')
         browser.get(url)
+        time.sleep(3)
         soup = BeautifulSoup(browser.page_source, 'html.parser')
         table = soup.find('table', id='datatable-1')
         for table_row in table.select('tr'):
@@ -112,24 +116,33 @@ def retrieve_data():
             'score_int_outlook']
     df[cols] = df[cols].apply(pd.to_numeric, errors='coerce')
 
+    # rewrites everything as a decimal point instead of percentage, adds zeros for missing datapoints
+
+
     # saves data-frame as a comma separated values file
-    df.to_csv('university_ranking.csv')
+    df.to_csv('university_ranking_unf.csv')
 
 
 def main():
-    retrieve_data()
+
+    #retrieve_data()
 
     # reads df from file
-    df = pd.read_csv('university_ranking.csv', index_col=0)
+    df = pd.read_csv('university_ranking_unf.csv', index_col=0)
+
+    # prints missing values and what columns they are missing from
+    print(df.isnull().sum())
 
     # fills missing data with stuff
     df = fill.male_female_fill(df)
     df = fill.score_industry_fill(df)
     df = fill.score_overall_fill(df)
 
-    # rewrites everything as a decimal point instead of percentage, adds zeros for missing datapoints
     df['pct_intl_student'] = df['pct_intl_student'].str.replace(r'%', r'.0').astype('float') / 100.0
-    df = df.fillna(0)
+    df['pct_intl_student'] = df['pct_intl_student'].fillna(0)
+    
+    # prints missing values and what columns they are missing from
+    print(df.isnull().sum())
 
     df.to_csv('university_ranking.csv')
 
