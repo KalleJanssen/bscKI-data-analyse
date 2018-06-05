@@ -1,6 +1,60 @@
-<!DOCTYPE html5>
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>University Ranking Dataset</title>
+        
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.16.min.css" type="text/css" />
+        
+<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.16.min.js"></script>
+<script type="text/javascript">
+    Bokeh.set_log_level("info");
+</script>
+    </head>
     <body>
-Hello World!
+        
+        <div class="bk-root">
+            <div class="bk-plotdiv" id="9e8eae6e-bef6-4b3b-b6e2-842b593cf321"></div>
+        </div>
+        
+        <script type="application/json" id="f0029e78-7553-4d9a-9023-d74830c58839">
+          {"68d7474f-0b85-4274-88da-193bc9afdd9e":{"roots":{"references":[{"attributes":{},"id":"8195dbeb-9fc9-47eb-be04-dcd96b41f176","type":"CategoricalTicker"},{"attributes":{"fill_color":{"value":"#1f77b4"},"line_color":{"value":"#1f77b4"},"top":{"field":"counts"},"width":{"value":0.9},"x":{"field":"x"}},"id":"c0c31a6c-0311-407e-bbd3-092ebdb26154","type":"VBar"},{"attributes":{},"id":"7555c264-5cfa-44ef-bad4-4c82812aa9fd","type":"BasicTicker"},{"attributes":{"dimension":1,"plot":{"id":"e3e1f569-7e0d-4bfb-83a3-994c8ad69aec","subtype":"Figure","type":"Plot"},"ticker":{"id":"7555c264-5cfa-44ef-bad4-4c82812aa9fd","type":"BasicTicker"}},"id":"af5fe059-c92e-4555-a4ce-b10e8a1758d5","type":"Grid"},{"attributes":{"data_source":{"id":"b5fc8918-c161-48a5-8276-0615b225e394","type":"ColumnDataSource"},"glyph":{"id":"c0c31a6c-0311-407e-bbd3-092ebdb26154","type":"VBar"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"10b6f12b-4632-4a16-973d-70365fbe3f7a","type":"VBar"},"selection_glyph":null,"view":{"id":"97fa986b-8860-4c7d-9d53-1b41851d58af","type":"CDSView"}},"id":"91c37332-bc9e-4aa8-8fff-fb6f50d186ff","type":"GlyphRenderer"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"value":"#1f77b4"},"line_alpha":{"value":0.1},"line_color":{"value":"#1f77b4"},"top":{"field":"counts"},"width":{"value":0.9},"x":{"field":"x"}},"id":"10b6f12b-4632-4a16-973d-70365fbe3f7a","type":"VBar"},{"attributes":{"callback":null,"factors":[["US","2016"],["UK","2016"],["Japan","2016"],["Germany","2016"],["China","2016"],["Italy","2016"],["Australia","2016"],["France","2016"],["Canada","2016"],["Spain","2016"]],"range_padding":0.1},"id":"d2e88d1c-d1d9-415e-941a-41624a6529cb","type":"FactorRange"},{"attributes":{"source":{"id":"b5fc8918-c161-48a5-8276-0615b225e394","type":"ColumnDataSource"}},"id":"97fa986b-8860-4c7d-9d53-1b41851d58af","type":"CDSView"},{"attributes":{"below":[{"id":"77226952-1527-45cb-a9e1-7089be3137c6","type":"CategoricalAxis"}],"left":[{"id":"df5124bc-32c2-4c9b-9357-d652a4c433a3","type":"LinearAxis"}],"plot_height":250,"renderers":[{"id":"77226952-1527-45cb-a9e1-7089be3137c6","type":"CategoricalAxis"},{"id":"870b716d-61fa-43bf-8239-4f9e3a81f24b","type":"Grid"},{"id":"df5124bc-32c2-4c9b-9357-d652a4c433a3","type":"LinearAxis"},{"id":"af5fe059-c92e-4555-a4ce-b10e8a1758d5","type":"Grid"},{"id":"91c37332-bc9e-4aa8-8fff-fb6f50d186ff","type":"GlyphRenderer"}],"title":{"id":"b338f1ca-529d-4971-8086-7d0d364aaf79","type":"Title"},"toolbar":{"id":"ab654941-fdfb-41a0-ab93-03af18827b6c","type":"Toolbar"},"toolbar_location":null,"x_range":{"id":"d2e88d1c-d1d9-415e-941a-41624a6529cb","type":"FactorRange"},"x_scale":{"id":"152d14c2-501b-4011-beea-f54afcc44efc","type":"CategoricalScale"},"y_range":{"id":"96e94b2d-bad6-47f3-a740-8ce4c7acbf80","type":"DataRange1d"},"y_scale":{"id":"2cab3286-8c63-4a89-9e24-c1ad559899b8","type":"LinearScale"}},"id":"e3e1f569-7e0d-4bfb-83a3-994c8ad69aec","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"4e3a12a1-7e35-4541-9be7-bb88e2b7b986","type":"CategoricalTickFormatter"},{"attributes":{"plot":null,"text":"Number of universities in ranking per year per country"},"id":"b338f1ca-529d-4971-8086-7d0d364aaf79","type":"Title"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_scroll":"auto","active_tap":"auto"},"id":"ab654941-fdfb-41a0-ab93-03af18827b6c","type":"Toolbar"},{"attributes":{"callback":null,"data":{"counts":[147,78,41,37,37,34,31,27,25,25],"x":[["US","2016"],["UK","2016"],["Japan","2016"],["Germany","2016"],["China","2016"],["Italy","2016"],["Australia","2016"],["France","2016"],["Canada","2016"],["Spain","2016"]]},"selected":{"id":"9bc32918-f996-4582-9b6a-7799eb0f0eb3","type":"Selection"},"selection_policy":{"id":"3ebf6eeb-020f-49dc-82eb-14f806d63db4","type":"UnionRenderers"}},"id":"b5fc8918-c161-48a5-8276-0615b225e394","type":"ColumnDataSource"},{"attributes":{"callback":null,"start":0},"id":"96e94b2d-bad6-47f3-a740-8ce4c7acbf80","type":"DataRange1d"},{"attributes":{"formatter":{"id":"a6e6802e-c32f-4873-b00b-4972b468f294","type":"BasicTickFormatter"},"plot":{"id":"e3e1f569-7e0d-4bfb-83a3-994c8ad69aec","subtype":"Figure","type":"Plot"},"ticker":{"id":"7555c264-5cfa-44ef-bad4-4c82812aa9fd","type":"BasicTicker"}},"id":"df5124bc-32c2-4c9b-9357-d652a4c433a3","type":"LinearAxis"},{"attributes":{},"id":"9bc32918-f996-4582-9b6a-7799eb0f0eb3","type":"Selection"},{"attributes":{},"id":"a6e6802e-c32f-4873-b00b-4972b468f294","type":"BasicTickFormatter"},{"attributes":{},"id":"2cab3286-8c63-4a89-9e24-c1ad559899b8","type":"LinearScale"},{"attributes":{},"id":"152d14c2-501b-4011-beea-f54afcc44efc","type":"CategoricalScale"},{"attributes":{},"id":"3ebf6eeb-020f-49dc-82eb-14f806d63db4","type":"UnionRenderers"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"e3e1f569-7e0d-4bfb-83a3-994c8ad69aec","subtype":"Figure","type":"Plot"},"ticker":{"id":"8195dbeb-9fc9-47eb-be04-dcd96b41f176","type":"CategoricalTicker"}},"id":"870b716d-61fa-43bf-8239-4f9e3a81f24b","type":"Grid"},{"attributes":{"formatter":{"id":"4e3a12a1-7e35-4541-9be7-bb88e2b7b986","type":"CategoricalTickFormatter"},"major_label_orientation":1,"plot":{"id":"e3e1f569-7e0d-4bfb-83a3-994c8ad69aec","subtype":"Figure","type":"Plot"},"ticker":{"id":"8195dbeb-9fc9-47eb-be04-dcd96b41f176","type":"CategoricalTicker"}},"id":"77226952-1527-45cb-a9e1-7089be3137c6","type":"CategoricalAxis"}],"root_ids":["e3e1f569-7e0d-4bfb-83a3-994c8ad69aec"]},"title":"Bokeh Application","version":"0.12.16"}}
+        </script>
+        <script type="text/javascript">
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('f0029e78-7553-4d9a-9023-d74830c58839').textContent;
+                  var render_items = [{"docid":"68d7474f-0b85-4274-88da-193bc9afdd9e","elementid":"9e8eae6e-bef6-4b3b-b6e2-842b593cf321","modelid":"e3e1f569-7e0d-4bfb-83a3-994c8ad69aec"}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        embed_document(root);
+                        clearInterval(timer);
+                      }
+                      attempts++;
+                      if (attempts > 100) {
+                        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing")
+                        clearInterval(timer);
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
     </body>
 </html>
