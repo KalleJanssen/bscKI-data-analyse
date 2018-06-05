@@ -128,7 +128,7 @@ def main():
     #retrieve_data()
 
     # reads df from file
-    df = pd.read_csv('university_ranking_unf.csv', index_col=0)
+    df = pd.read_csv('../university_ranking_unf.csv', index_col=0)
 
     # prints missing values and what columns they are missing from
     print(df.isnull().sum())
@@ -144,8 +144,8 @@ def main():
     # prints missing values and what columns they are missing from
     print(df.isnull().sum())
 
-    df.to_csv('university_ranking.csv')
-
+    df.to_csv('../university_ranking.csv')
+    df.to_json('../university_ranking.json')
 
 if __name__ == "__main__":
     main()
