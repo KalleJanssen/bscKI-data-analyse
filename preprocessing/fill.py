@@ -46,6 +46,7 @@ def score_industry_fill(df):
     df_nans = df.loc[~not_nans].copy()
     df_nans['score_industry'] = clf.predict(df_nans[coi])
     df.score_industry.fillna(df_nans.score_industry, inplace=True)
+    df['score_industry'] = round(df['score_industry'], 2)
 
     return df
 
@@ -70,5 +71,6 @@ def score_overall_fill(df):
     df_nans = df.loc[~not_nans].copy()
     df_nans['score_overall'] = clf.predict(df_nans[coi])
     df.score_overall.fillna(df_nans.score_overall, inplace=True)
+    df['score_overall'] = round(df['score_overall'], 2)
 
     return df
