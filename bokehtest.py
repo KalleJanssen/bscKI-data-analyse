@@ -8,15 +8,11 @@ from bokeh.models import Panel, ColumnDataSource, HoverTool
 from bokeh.models.widgets import Tabs, CheckboxGroup, Slider
 from bokeh.io import output_file, show, curdoc
 
-year = input("Which year do you want to look at? ")
+slider = Slider(start=2016, end=2018, value=2016, step=1, title="Year")
 
 uniranking1 = pd.read_csv('university_ranking.csv')
-if year == 'all':
-    uniranking = uniranking1
-elif '2016' or '2017' or '2018':
-    uniranking = uniranking1.loc[uniranking1['year'] == int(year)]
-else:
-    year = input("Please choose 2016, 2017, 2018 or all.")
+year = slider.value
+uniranking = uniranking1.loc[uniranking1['year'] == int(year)]
 
 p = figure(plot_width = 600, plot_height = 600, title ='University grade and ranking correlation',
 x_axis_label ='Overall grade', y_axis_label = 'Amount of universities')
@@ -44,24 +40,12 @@ p.quad(source = src, bottom=0, top='score_overall',
 hover = HoverTool(tooltips = [('Score', '@left - @right'),
                              ('Amount of universities', '@score_overall')])
 
-
 # Add the hover tool to the graph
 p.add_tools(hover)
 
-def update(attr, old, new):
-    year = slider.value
-    new_data = {
-        'x'       : uniranking.loc[year].ranking,
-        'y'       : uniranking.loc[year].score_overall,
-    }
-    scores = new_data
+# slider.on_change('value', update)
 
-slider = Slider(start=2016, end=2018, value=2016, step=1, title="Year")
-slider.on_change('value', update)
-
-# Show the plot
 layout = layout(widgetbox(slider), p)
-curdoc().add_root(layout)
 
 # Show the plot
 show(layout)
