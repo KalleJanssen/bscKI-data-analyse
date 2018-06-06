@@ -3,8 +3,10 @@ from bokeh.plotting import figure, output_file, show
 from numpy import histogram
 import pandas as pd
 import numpy as np
-from bokeh.models import ColumnDataSource, HoverTool
-from bokeh.models.widgets import CheckboxGroup
+from bokeh.layouts import column, row, widgetbox, WidgetBox, layout
+from bokeh.models import Panel, ColumnDataSource, HoverTool
+from bokeh.models.widgets import Tabs, CheckboxGroup, Slider
+from bokeh.io import output_file, show, curdoc
 
 year = input("Which year do you want to look at? ")
 
@@ -42,9 +44,24 @@ p.quad(source = src, bottom=0, top='score_overall',
 hover = HoverTool(tooltips = [('Score', '@left - @right'),
                              ('Amount of universities', '@score_overall')])
 
-#year_selection = CheckboxGroup(labels=available_years, active = [0,1])
+
 # Add the hover tool to the graph
 p.add_tools(hover)
 
+def update(attr, old, new):
+    year = slider.value
+    new_data = {
+        'x'       : uniranking.loc[year].ranking,
+        'y'       : uniranking.loc[year].score_overall,
+    }
+    scores = new_data
+
+slider = Slider(start=2016, end=2018, value=2016, step=1, title="Year")
+slider.on_change('value', update)
+
 # Show the plot
-show(p)
+layout = layout(widgetbox(slider), p)
+curdoc().add_root(layout)
+
+# Show the plot
+show(layout)
