@@ -3,7 +3,7 @@ import fill
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
-
+import country_converter as coco
 
 def retrieve_data():
     stats = []
@@ -133,6 +133,12 @@ def main():
     df = fill.pct_intl_student_fill(df)
     df = fill.score_overall_fill(df)
     df = fill.score_industry_fill(df)
+    
+    # adds continent column
+    country_list = df['country'].tolist()
+    converter = coco.CountryConverter()
+    continents = converter.convert(names=country_list, to='continent')
+    df['continents'] = continents
     
     print(df.info())
     
