@@ -106,7 +106,7 @@ def retrieve_data():
     # merges 2 data-frames based on university name, country and year into one data-frame
     df = ranking_df.merge(score_df, on=['university_name', 'country', 'year'])
 
-    df[['male', 'female']] = df.pop('fem_mal_ratio').str.split(' : ', expand=True)
+    df[['female', 'male']] = df.pop('fem_mal_ratio').str.split(' : ', expand=True)
     df['no_student'] = df['no_student'].str.strip('" ').str.replace(',', '').astype(int)
     cols = ['score_overall',
             'score_teaching',
@@ -117,7 +117,7 @@ def retrieve_data():
     df[cols] = df[cols].apply(pd.to_numeric, errors='coerce')
 
     # saves data-frame as a comma separated values file
-    df.to_csv('university_ranking_unf.csv')
+    df.to_csv('../university_ranking_unf.csv')
 
 
 def main():
