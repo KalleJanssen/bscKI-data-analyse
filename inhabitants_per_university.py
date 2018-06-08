@@ -13,7 +13,7 @@ def main():
     # reads df from file
     df = pd.read_csv('university_ranking.csv', index_col=0)
 
-    output_file('docs/bar-chart-continent-split.html')
+    output_file('docs/inhabitants-per-university.html')
 
     # splits data-frame
     df2018 = df.loc[df['year'] == 2018]

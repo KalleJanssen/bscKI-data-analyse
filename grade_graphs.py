@@ -11,7 +11,7 @@ from bokeh.io import output_file, show, curdoc
 
 uniranking = pd.read_csv('university_ranking.csv')
 year2016 = 2016
-uniranking2016 = uniranking.loc[uniranking['year'] == int(year2016)]
+uniranking2016 = unirankin5g.loc[uniranking['year'] == int(year2016)]
 
 p2016 = figure(plot_width = 600, plot_height = 600, title ='Amount of universities with certain overall grades 2016',
 x_axis_label ='Overall grade', y_axis_label = 'Amount of universities')
