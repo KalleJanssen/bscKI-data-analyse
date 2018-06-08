@@ -19,53 +19,62 @@ def main():
     df2017 = df.loc[df['year'] == 2017].head(800)
     df2018 = df.loc[df['year'] == 2018].head(800)
     
+    dfs = [df2016, df2017, df2018]
+    # continent order that I wanted
+    continents = ['Europe', 'America', 'Asia', 'Oceania', 'Africa']      
+    
+    list = []
+
+    df_europe = df.loc[df['continents'] == 'Europe']
+    df_america = df.loc[df['continents'] == 'America']
+    df_asia = df.loc[df['continents'] == 'Asia']
+    df_oceania = df.loc[df['continents'] == 'Oceania']
+    df_africa = df.loc[df['continents'] == 'Africa']
+
     # all years
     years = ['2016', '2017', '2018']
 
-    # all continents put into lists
-    continents_2016 = df2016['continents'].tolist()
-    continents_2017 = df2017['continents'].tolist()
-    continents_2018 = df2018['continents'].tolist()
+    # # all continents put into lists
+    # continents_2016 = df2016['continents'].tolist()
+    # continents_2017 = df2017['continents'].tolist()
+    # continents_2018 = df2018['continents'].tolist()
 
-    # all continents counter and put into dictionaries
-    count_2016 = dict(Counter(continents_2016))
-    count_2017 = dict(Counter(continents_2017))
-    count_2018 = dict(Counter(continents_2018))
+    # # all continents counter and put into dictionaries
+    # count_2016 = dict(Counter(continents_2016))
+    # count_2017 = dict(Counter(continents_2017))
+    # count_2018 = dict(Counter(continents_2018))
 
-    # continent order that I wanted
-    continents = ['Europe', 'America', 'Asia', 'Oceania', 'Africa']
+    # # lists of counts in corrrect order as outlined above
+    # list2016 = [count_2016[key] for key in continents]
+    # list2017 = [count_2017[key] for key in continents]
+    # list2018 = [count_2018[key] for key in continents]
 
-    # lists of counts in corrrect order as outlined above
-    list2016 = [count_2016[key] for key in continents]
-    list2017 = [count_2017[key] for key in continents]
-    list2018 = [count_2018[key] for key in continents]
+    # # dictionary with data for making a figure
+    # data = {'continents' : continents,
+    #         '2016' : list2016,
+    #         '2017' : list2017,
+    #         '2018' : list2018 }
 
-    # dictioanry with data for making a figure
-    data = {'continents' : continents,
-            '2016' : list2016,
-            '2017' : list2017,
-            '2018' : list2018 }
+    # source = ColumnDataSource(data=data)
 
-    source = ColumnDataSource(data=data)
+    # p = figure(x_range=continents, y_range=(0, 450), plot_height=250, title="University count per continent per year",
+    #            toolbar_location=None, tools="")
 
-    p = figure(x_range=continents, y_range=(0, 450), plot_height=250, title="University count per continent per year",
-               toolbar_location=None, tools="")
+    # p.vbar(x=dodge('continents', -0.25, range=p.x_range), top='2016', width=0.2, source=source,
+    #        color="#c9d9d3", legend=value("2016"))
 
-    p.vbar(x=dodge('continents', -0.25, range=p.x_range), top='2016', width=0.2, source=source,
-           color="#c9d9d3", legend=value("2016"))
+    # p.vbar(x=dodge('continents',  0.0,  range=p.x_range), top='2017', width=0.2, source=source,
+    #        color="#718dbf", legend=value("2017"))
 
-    p.vbar(x=dodge('continents',  0.0,  range=p.x_range), top='2017', width=0.2, source=source,
-           color="#718dbf", legend=value("2017"))
+    # p.vbar(x=dodge('continents',  0.25, range=p.x_range), top='2018', width=0.2, source=source,
+    #        color="#e84d60", legend=value("2018"))
 
-    p.vbar(x=dodge('continents',  0.25, range=p.x_range), top='2018', width=0.2, source=source,
-           color="#e84d60", legend=value("2018"))
+    # p.x_range.range_padding = 0.1
+    # p.xgrid.grid_line_color = None
+    # p.legend.location = "top_right"
+    # p.legend.orientation = "horizontal"
 
-    p.x_range.range_padding = 0.1
-    p.xgrid.grid_line_color = None
-    p.legend.location = "top_right"
-    p.legend.orientation = "horizontal"
-
-    show(p)
+    # show(p)
 
 if __name__ == "__main__":
     main()
