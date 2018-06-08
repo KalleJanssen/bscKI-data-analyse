@@ -67,6 +67,9 @@ def main():
 
     p.add_tools(hover)
 
+    # disables the scientific notation of numbers
+    p.left[0].formatter.use_scientific = False
+
     show(p)
 
 if __name__ == "__main__":
