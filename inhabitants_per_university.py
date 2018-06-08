@@ -63,13 +63,15 @@ def main():
 
     hover = HoverTool(tooltips = [('Inhabitants', "@listinhabitants"),
                                  ('Amount of universities', '@listuniversities'),
-                                 ('Number of inhabitants per university', '@2018')])
+                                 ('Number of inhabitants per university', '@2018{int}')])
 
     p.add_tools(hover)
 
     # disables the scientific notation of numbers
     p.left[0].formatter.use_scientific = False
 
+    output_file('docs/inhabitants_per_university.html')
+    
     show(p)
 
 if __name__ == "__main__":
