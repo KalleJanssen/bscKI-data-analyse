@@ -12,7 +12,6 @@ from bokeh.io import output_file, show, curdoc
 uniranking = pd.read_csv('university_ranking.csv')
 
 year2016 = 2016
-uniranking2016 = unirankin5g.loc[uniranking['year'] == int(year2016)]
 uniranking2016 = uniranking.loc[uniranking['year'] == 2016]
 uniranking2017 = uniranking.loc[uniranking['year'] == 2017]
 uniranking2018 = uniranking.loc[uniranking['year'] == 2018]
@@ -90,7 +89,7 @@ plot2018.add_tools(hover)
 
 layout = layout([plot2016, plot2017, plot2018])
 
-output_file('docs/grade_graphs.html')
+output_file('docs/grade-graphs.html')
 
 # Show the plot
 show(layout)
