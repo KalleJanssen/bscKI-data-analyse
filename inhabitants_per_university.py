@@ -30,14 +30,23 @@ def main():
     # continent order that I wanted
     continents = ['Africa', 'Asia', 'America', 'Europe', 'Oceania']
 
+    # inhabitants of each continent
     count_20181 = {'Europe': 738849000, 'America': 1001559000, 'Asia': 4436224000, 'Africa' : 1216130000, 'Oceania' : 39901000}
 
     # lists of counts in corrrect order as outlined above
     list2018 = [count_20181[key]/count_2018[key] for key in continents]
 
+    # lists of amount of inhabitants in corrrect order as outlined above
+    listinhabitants = [count_20181[key] for key in continents]
+
+    # lists of amount of universities in corrrect order as outlined above
+    listuniversities = [count_2018[key] for key in continents]
+
     # dictioanry with data for making a figure
     data = {'continents' : continents,
-            '2018' : list2018 }
+            '2018' : list2018,
+            'listinhabitants' : listinhabitants,
+            'listuniversities': listuniversities}
 
     source = ColumnDataSource(data=data)
 
@@ -52,8 +61,11 @@ def main():
     p.legend.location = "top_right"
     p.legend.orientation = "horizontal"
 
-    #hover = HoverTool(tooltips = [('Inhabitants', '@left - @right'),
-    #                             ('Amount of universities', '@score_overall')])
+    hover = HoverTool(tooltips = [('Inhabitants', "@listinhabitants"),
+                                 ('Amount of universities', '@listuniversities'),
+                                 ('Number of inhabitants per university', '@2018')])
+
+    p.add_tools(hover)
 
     show(p)
 
