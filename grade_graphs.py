@@ -111,8 +111,9 @@ hover = HoverTool(tooltips = [('Score', '@left2018 - @right2018'),
 # Add the hover tool to the graph
 p2018.add_tools(hover)
 
-
 layout = layout([p2016, p2017, p2018])
+
+output_file('docs/grade_graphs.html')
 
 # Show the plot
 show(layout)
