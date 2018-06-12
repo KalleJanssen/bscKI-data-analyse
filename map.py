@@ -25,7 +25,7 @@ data = [ dict(
       ) ]
 
 layout = dict(
-    title = 'Nunber of universities in the ranking per country',
+    title = 'Number of universities in the ranking per country',
     geo = dict(
         showframe = False,
         showcoastlines = False,
