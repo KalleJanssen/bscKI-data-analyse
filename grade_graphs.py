@@ -11,7 +11,6 @@ from bokeh.io import output_file, show, curdoc
 
 uniranking = pd.read_csv('university_ranking.csv')
 
-year2016 = 2016
 uniranking2016 = uniranking.loc[uniranking['year'] == 2016]
 uniranking2017 = uniranking.loc[uniranking['year'] == 2017]
 uniranking2018 = uniranking.loc[uniranking['year'] == 2018]
@@ -73,19 +72,19 @@ plot2018.quad(source = src2018, bottom=0, top='score_overall2018',
        hover_fill_alpha = 1.0, hover_fill_color = 'navy')
 
 # Makes the hover work
-hover = HoverTool(tooltips = [('Score', '@left2016 - @right2016'),
-                             ('Amount of universities', '@score_overall2016')])
+hover2016 = HoverTool(tooltips = [('Score', '@left2016 - @right2016'),
+                             ('# of universities', '@score_overall2016')])
 
-hover = HoverTool(tooltips = [('Score', '@left2017 - @right2017'),
-                             ('Amount of universities', '@score_overall2017')])
+hover2017 = HoverTool(tooltips = [('Score', '@left2017 - @right2017'),
+                             ('# of universities', '@score_overall2017')])
 
-hover = HoverTool(tooltips = [('Score', '@left2018 - @right2018'),
-                             ('Amount of universities', '@score_overall2018')])
+hover2018 = HoverTool(tooltips = [('Score', '@left2018 - @right2018'),
+                             ('# of universities', '@score_overall2018')])
 
 # Add the hover tool to the graph
-plot2016.add_tools(hover)
-plot2017.add_tools(hover)
-plot2018.add_tools(hover)
+plot2016.add_tools(hover2016)
+plot2017.add_tools(hover2017)
+plot2018.add_tools(hover2018)
 
 layout = layout([plot2016, plot2017, plot2018])
 
