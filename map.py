@@ -36,4 +36,4 @@ layout = dict(
 )
 
 fig = dict( data=data, layout=layout )
-plotly.offline.plot(fig,validate=False,filename = 'd3-world-map.html')    
+plotly.offline.plot(fig,validate=False,filename = 'docs/map.html')    
