@@ -21,12 +21,13 @@ def main():
     # all international student percantages and ranking put into lists
     int_student_2018 = df2018['pct_intl_student'].tolist()
     ranking2018 = df2018['ranking'].tolist()
-
+    uni_names = df2018['university_name'].tolist()
     # takes 0.xx to xx
     percent_int_student = [round(key1 * 100) for key1 in int_student_2018]
 
     data = {'int_student' : percent_int_student,
-            'rank' : ranking2018
+            'rank' : ranking2018,
+            'uni_names' : uni_names
             }
 
     source = ColumnDataSource(data=data)
@@ -43,7 +44,9 @@ def main():
 
     # makes hover work
     hover = HoverTool(tooltips = [('%  of international students', "@int_student"),
-                                 ('University rank', '@rank')])
+                                 ('University rank', '@rank'),
+                                 ('University', '@uni_names')
+                                 ])
 
     p.add_tools(hover)
 
