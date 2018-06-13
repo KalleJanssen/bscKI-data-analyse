@@ -1,8 +1,19 @@
 import pandas as pd
+from statistics import mean
 from bokeh.plotting import figure, ColumnDataSource
 from bokeh.io import show, output_file
+from bokeh.models import Legend
 from bokeh.models import HoverTool
 
+
+def best_fit_line(xs, ys):
+
+    m = (((mean(xs)*mean(ys)) - mean(xs*ys)) /
+         ((mean(xs)*mean(xs)) - mean(xs*xs)))
+
+    b = mean(ys) - m*mean(xs)
+
+    return m, b
 
 def main():
 
@@ -46,21 +57,31 @@ def main():
             'university':df['university_name']
     }
 
+    m, b = best_fit_line(df['ranking'], df['pct_intl_student'])
+    m = round(m, 4)
+    b = round(b, 4)
+
+    x = [i for i in range(801)]
+    y = [m * x + b for x in range(len(x))]
+
     source = ColumnDataSource(data)
 
     hover = HoverTool(
                 tooltips=[('Year', '@years'),
                           ('Ranking', '@ranking'),
                           ('% Int. Students', '@pct_intl_student%'),
-                          ('University', '@university')])
-
-
+                          ('University', '@university')], 
+                names=['scatter'])
 
     p = figure(tools=[hover], title="Scatterplot: International Students")
     p.xaxis.axis_label = 'International Ranking'
     p.yaxis.axis_label = 'Pct. International Students'
+    p.scatter('ranking', 'pct_intl_student', source=source, color='color', name='scatter')
+    r1 = p.line(x, y, line_width=2, color='black')
+    legend = Legend(items=[
+                ("{0}x + {1}".format(m, b), [r1])])
 
-    p.scatter('ranking', 'pct_intl_student', source=source, color='color')
+    p.add_layout(legend, 'above')
 
     show(p)
 
