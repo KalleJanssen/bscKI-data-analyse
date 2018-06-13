@@ -7,6 +7,7 @@ from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure
 from bokeh.transform import dodge
 
+
 def main():
 
     # reads df from file
@@ -20,16 +21,11 @@ def main():
     df2018 = df.loc[df['year'] == 2018].head(800)
     
     dfs = [df2016, df2017, df2018]
+
     # continent order that I wanted
     continents = ['Europe', 'America', 'Asia', 'Oceania', 'Africa']      
     
     list = []
-
-    df_europe = df.loc[df['continents'] == 'Europe']
-    df_america = df.loc[df['continents'] == 'America']
-    df_asia = df.loc[df['continents'] == 'Asia']
-    df_oceania = df.loc[df['continents'] == 'Oceania']
-    df_africa = df.loc[df['continents'] == 'Africa']
 
     # all years
     years = ['2016', '2017', '2018']
