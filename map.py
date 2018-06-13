@@ -91,5 +91,5 @@ for df in dfs:
     )
 
     fig = dict( data=data, layout=layout )
-    plotly.offline.plot(fig,validate=False,filename = 'docs/map.html' + str(i) + '.html')    
+    plotly.offline.plot(fig,validate=False,filename = 'docs/map' + str(i) + '.html')    
     i += 1

@@ -51,6 +51,7 @@ def main():
             '2017' : list2017,
             '2018' : list2018 }
 
+
     source = ColumnDataSource(data=data)
 
     p = figure(x_range=continents, y_range=(0, 450), plot_height=250, title="University count per continent per year",

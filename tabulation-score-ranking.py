@@ -22,9 +22,6 @@ def mean_sd(list):
 
 	return mean, sd
 
-
-
-
 df = pd.read_csv('university_ranking.csv', index_col=0)
 
 continents = ['Europe', 'America', 'Asia', 'Oceania', 'Africa']      

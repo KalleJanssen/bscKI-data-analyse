@@ -1,52 +1,69 @@
 import pandas as pd
-import numpy as np
-from collections import Counter
-from bokeh.core.properties import value
+from bokeh.plotting import figure, ColumnDataSource
 from bokeh.io import show, output_file
-from bokeh.models import ColumnDataSource
-from bokeh.plotting import figure
-from bokeh.transform import dodge
-from bokeh.models import Panel, ColumnDataSource, HoverTool
+from bokeh.models import HoverTool
+
 
 def main():
+
+    # file where .html should be saved
+    output_file('docs/inter_students_scatter.html', title='Scatterplot: International Students')
 
     # reads df from file
     df = pd.read_csv('university_ranking.csv', index_col=0)
 
-    # splits data-frame
-    df2018 = df.loc[df['year'] == 2018].head(800)
+    colormap = {2016: 'red',
+                2017: 'green',
+                2018: 'blue'}
 
-    # all international student percantages and ranking put into lists
-    int_student_2018 = df2018['pct_intl_student'].tolist()
-    ranking2018 = df2018['ranking'].tolist()
-    uni_names = df2018['university_name'].tolist()
+    years = [2016, 2017, 2018]
 
-    # takes 0.xx to xx
-    percent_int_student = [round(key1 * 100) for key1 in int_student_2018]
+    # gets top 800 for every year and puts into list
+    dfs = [df.loc[df['year'] == year].head(800) for year in years]
+    df = dfs[0].append(dfs[1].append(dfs[2]))
 
-    data = {'int_student' : percent_int_student,
-            'rank' : ranking2018,
-            'uni_names' : uni_names
-            }
+    # changes float to integer for more correct scatterplot
+    df['pct_intl_student'] = df['pct_intl_student'] * 100
+    df.pct_intl_student = df.pct_intl_student.astype(int)
 
-    source = ColumnDataSource(data=data)
+    # creates all data we need
+    year_list = []
 
-    p = figure(x_range=(0,800), y_range=(0, 100), plot_height=500, plot_width=1000, title="Percentage of international student in top 800 universities in 2018",
-               x_axis_label ='Rank', y_axis_label = 'Percentage of international student (in %)', toolbar_location=None, tools="")
+    # creates list of years for every datapoint
+    for year in years:
+        for i in range(800):
+            year_list.append(year)
 
-    # makes the scatterplot
-    p.circle(ranking2018, percent_int_student, size=20, color="navy", alpha=0.5, line_width=1)
+    # creates list of colors for every datapoint
+    colors = [colormap[x] for x in df['year']]
 
-    # makes hover work
-    hover = HoverTool(tooltips = [('%  of international students', "@int_student"),
-                                 ('University rank', '@rank'),
-                                 ('University', '@uni_names')
-                                 ])
+    # all data collected in a dictionary
+    data = {
+            'ranking': df['ranking'],
+            'pct_intl_student' : df['pct_intl_student'],
+            'years': year_list,
+            'color': colors,
+            'university':df['university_name']
+    }
 
-    p.add_tools(hover)
+    source = ColumnDataSource(data)
 
-    output_file('docs/inter_student_scatter.html')
+    hover = HoverTool(
+                tooltips=[('Year', '@years'),
+                          ('Ranking', '@ranking'),
+                          ('% Int. Students', '@pct_intl_student%'),
+                          ('University', '@university')])
+
+
+
+    p = figure(tools=[hover], title="Scatterplot: International Students")
+    p.xaxis.axis_label = 'International Ranking'
+    p.yaxis.axis_label = 'Pct. International Students'
+
+    p.scatter('ranking', 'pct_intl_student', source=source, color='color')
 
     show(p)
+
+
 if __name__ == "__main__":
     main()
