@@ -36,11 +36,9 @@ def main():
                x_axis_label ='Rank', y_axis_label = 'Percentage of international student (in %)', toolbar_location=None, tools="")
 
     p.vbar(x=dodge('rank', 0, range=p.x_range), top='int_student', width=0.2, source=source,
-           color="#0000FF", legend=value("Inhabitants per university"))
+           color="#0000FF")
 
     p.xgrid.grid_line_color = None
-    p.legend.location = "top_right"
-    p.legend.orientation = "horizontal"
 
     # makes hover work
     hover = HoverTool(tooltips = [('%  of international students', "@int_student"),
