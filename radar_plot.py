@@ -40,6 +40,8 @@ y = [v[1] for v in verts]
 
 def radar_plot(df, year):
 
+	df = df.copy()
+
 	p = figure(title="Radar plot of 5 highest ranked universities in " + str(year), x_range=(0, 1.24))
 	t = figure(title="Radar plot of 5 lowest ranked universities in " + str(year), x_range=(0, 1.24))
 
@@ -82,6 +84,45 @@ def radar_plot(df, year):
 
 	return p, t
 
+def radar_plot_avg(df, year):
+
+	df = df.copy()
+
+	p = figure(title="Average radar plot of all ranked universities in " + str(year), x_range=(0, 1.24))
+
+	text = ['No. of Students per staff member', 'Male', '% Int. Students', 'No. of Students', '']
+	source = ColumnDataSource({'x':x + [centre ],'y':y + [1],'text':text})
+	
+	p.line(x="x", y="y", source=source)
+
+	p_labels = LabelSet(x="x",y="y",text="text",source=source)
+
+	p.add_layout(p_labels)
+
+	coi = ['no_student_p_staff', 'male', 'pct_intl_student', 'no_student']
+	df = df[coi]
+
+	# normalizes no_students_p_staff to a value between 0 and 1
+	df['no_student_p_staff'] = normalize(df, 'no_student_p_staff')
+	df['no_student'] = normalize(df, 'no_student')
+
+	# normalizes data to be between 0 and 1
+	df['male'] = df['male'] / 100
+
+	no_student_mean = df['no_student_p_staff'].mean()
+	male_mean = df['male'].mean()
+	pct_intl_student_mean = df['pct_intl_student'].mean()
+	no_student_mean = df['no_student'].mean()
+
+	flist = np.array([[no_student_mean, male_mean, pct_intl_student_mean, no_student_mean]])
+
+	for i in range(len(flist)):
+	    xt, yt = radar_patch(flist[i], theta, centre)
+	    p.patch(x=xt, y=yt, fill_alpha=0.15, fill_color='blue')
+
+	return p
+
+
 def main():
 
 	output_file('docs/radar_plot.html')
@@ -94,20 +135,24 @@ def main():
 
 	ts = []
 
+	avgs = []
+
 	for year in years:
 
 		new_df = df.loc[df['year'] == year]
 
 		p, t = radar_plot(df, year)
+		a = radar_plot_avg(df, year)
 
 		ps.append(p)
 		ts.append(t)
+		avgs.append(a)
 
 	grid_list = []
 
 	for i in range(len(ps)):
 
-		grid_list.append([ps[i], ts[i]])
+		grid_list.append([ps[i], ts[i], avgs[i]])
 
 	grid = gridplot(grid_list)
 
