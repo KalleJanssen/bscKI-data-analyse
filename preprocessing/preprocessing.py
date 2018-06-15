@@ -138,8 +138,8 @@ def main():
     country_list = df['country'].tolist()
     converter = coco.CountryConverter()
     continents = converter.convert(names=country_list, to='continent')
-    df['continents'] = continents
-    df['regions'] = converter.convert(names=country_list, to='UNregion')
+    df['continent'] = continents
+    df['region'] = converter.convert(names=country_list, to='UNregion')
     
     df.to_csv('../university_ranking.csv')
 

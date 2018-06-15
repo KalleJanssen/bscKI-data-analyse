@@ -1,4 +1,4 @@
-,university_name,country,ranking,no_student,no_student_p_staff,pct_intl_student,year,score_overall,score_teaching,score_research,score_citation,score_industry,score_int_outlook,female,male,continents,regions
+,university_name,country,ranking,no_student,no_student_p_staff,pct_intl_student,year,score_overall,score_teaching,score_research,score_citation,score_industry,score_int_outlook,female,male,continent,region
 0,California Institute of Technology,United States,1,2243,6.9,0.26,2016,95.2,95.6,97.6,99.8,97.8,64.0,33,67,America,Northern America
 1,University of Oxford,United Kingdom,2,19919,11.6,0.34,2016,94.2,86.5,98.9,98.8,73.1,94.4,46,54,Europe,Northern Europe
 2,Stanford University,United States,3,15596,7.8,0.22,2016,93.9,92.5,96.2,99.9,63.3,76.3,42,58,America,Northern America
