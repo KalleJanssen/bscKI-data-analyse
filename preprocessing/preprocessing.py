@@ -139,11 +139,9 @@ def main():
     converter = coco.CountryConverter()
     continents = converter.convert(names=country_list, to='continent')
     df['continents'] = continents
-    
-    print(df.info())
+    df['regions'] = converter.convert(names=country_list, to='UNregion')
     
     df.to_csv('../university_ranking.csv')
-    df.to_json('../university_ranking.json')
 
 if __name__ == "__main__":
     main()
