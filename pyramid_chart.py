@@ -8,6 +8,7 @@ from bokeh.plotting import figure
 from bokeh.transform import dodge
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import output_notebook, show, gridplot
+from bokeh.models import HoverTool
 
 from bokeh.models import FactorRange, Range1d, Plot, Rect, CategoricalAxis, LinearAxis, GlyphRenderer
 
@@ -28,8 +29,8 @@ def main():
 
   for df in dfs:
     
-      data = {	
-      		    'Ranking': df['ranking'],
+      data = {  
+              'Ranking': df['ranking'],
               'Male': df['male'],
               'Female': df['female'],
               'midFemale': df['female']/2,
@@ -47,9 +48,15 @@ def main():
       plot_height = 600
       plot_width = 600
 
+      hover = HoverTool(
+                tooltips=[
+                          ('Ranking', '@Ranking'),
+                          ('% male students', '@Male%'),
+                          ('% female students', '@Female%')
+                          ])
 
-      plot_left = figure(title="male", x_range=xdr_left, y_range=ydr, plot_height=plot_height, plot_width=int(plot_width/2))
-      plot_right = figure(title="female", x_range=xdr_right, y_range=ydr, plot_height=plot_height, plot_width=int(plot_width/2))
+      plot_left = figure(tools=[hover], title="male", x_range=xdr_left, y_range=ydr, plot_height=plot_height, plot_width=int(plot_width/2))
+      plot_right = figure(tools=[hover], title="female", x_range=xdr_right, y_range=ydr, plot_height=plot_height, plot_width=int(plot_width/2))
 
       # plot_left.add_layout(CategoricalAxis(), 'left')
       plot_right.yaxis.visible = False
@@ -77,6 +84,7 @@ def main():
 
       plot_left.min_border_right = 0
       plot_right.min_border_left = 0
+                
 
       output_file('docs/male_female' + str(i) + '.html')
       g = gridplot([[plot_left, plot_right]], border_space=0)
