@@ -2,6 +2,8 @@ from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure
 from bokeh.io import show, output_file
 
+output_file('docs/male-female-example.html')
+
 # create data
 products = ['python', 'pypy', 'jython']
 customers = ['Cust 1', 'Cust 2']
