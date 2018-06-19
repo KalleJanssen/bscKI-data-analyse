@@ -76,7 +76,7 @@ def main():
     p = figure(tools=[hover], title="Scatterplot: International Students")
     p.xaxis.axis_label = 'International Ranking'
     p.yaxis.axis_label = 'Pct. International Students'
-    p.scatter('ranking', 'pct_intl_student', source=source, color='color', name='scatter')
+    p.scatter('ranking', 'pct_intl_student', source=source, color='color', name='scatter', legend='years')
     r1 = p.line(x, y, line_width=2, color='black')
     legend = Legend(items=[
                 ("{0}x + {1}".format(m, b), [r1])])
