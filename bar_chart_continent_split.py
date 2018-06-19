@@ -31,9 +31,9 @@ def main():
     years = ['2016', '2017', '2018']
 
     # all continents put into lists
-    continents_2016 = df2016['continents'].tolist()
-    continents_2017 = df2017['continents'].tolist()
-    continents_2018 = df2018['continents'].tolist()
+    continents_2016 = df2016['continent'].tolist()
+    continents_2017 = df2017['continent'].tolist()
+    continents_2018 = df2018['continent'].tolist()
 
     # all continents counter and put into dictionaries
     count_2016 = dict(Counter(continents_2016))
