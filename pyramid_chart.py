@@ -8,6 +8,7 @@ from bokeh.plotting import figure
 from bokeh.transform import dodge
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import output_notebook, show, gridplot
+from bokeh.models import HoverTool
 
 from bokeh.models import FactorRange, Range1d, Plot, Rect, CategoricalAxis, LinearAxis, GlyphRenderer
 
@@ -27,11 +28,12 @@ def main():
   i = 2016
 
   for df in dfs:
-    
-      data = {	
-      		    'Ranking': df['ranking'],
+
+      data = {
+              'Ranking': df['ranking'],
               'Male': df['male'],
               'Female': df['female'],
+              'university':df['university_name'],
               'midFemale': df['female']/2,
               'midMale': df['male']/2
       }
@@ -45,26 +47,33 @@ def main():
       xdr_left = Range1d(max_value, 0)
       xdr_right = Range1d(0, max_value)
       plot_height = 600
-      plot_width = 600
+      plot_width = 800
 
+      hover = HoverTool(
+                tooltips=[
+                          ('Ranking', '@Ranking'),
+                          ('% male students', '@Male%'),
+                          ('% female students', '@Female%'),
+                          ('University', '@university')
+                          ])
 
-      plot_left = figure(title="male", x_range=xdr_left, y_range=ydr, plot_height=plot_height, plot_width=int(plot_width/2))
-      plot_right = figure(title="female", x_range=xdr_right, y_range=ydr, plot_height=plot_height, plot_width=int(plot_width/2))
+      plot_left = figure(tools=[hover], title="male", x_range=xdr_left, y_range=ydr, plot_height=plot_height, plot_width=int(plot_width/2))
+      plot_right = figure(tools=[hover], title="female", x_range=xdr_right, y_range=ydr, plot_height=plot_height, plot_width=int(plot_width/2))
 
       # plot_left.add_layout(CategoricalAxis(), 'left')
       plot_right.yaxis.visible = False
 
       # Set up the ranges, plot, and axes
       left_rect = Rect(y='Ranking',
-                       x='midMale', 
-                       width='Male', 
-                       height=bar_height, 
+                       x='midMale',
+                       width='Male',
+                       height=bar_height,
                        fill_color="#b3cde3",
                        line_color=None)
       right_rect = Rect(y='Ranking',
-                        x='midFemale', 
-                        width='Female', 
-                        height=bar_height, 
+                        x='midFemale',
+                        width='Female',
+                        height=bar_height,
                         fill_color="#fbb4ae",
                         line_color=None)
 
@@ -77,6 +86,7 @@ def main():
 
       plot_left.min_border_right = 0
       plot_right.min_border_left = 0
+
 
       output_file('docs/male_female' + str(i) + '.html')
       g = gridplot([[plot_left, plot_right]], border_space=0)
