@@ -15,10 +15,12 @@ def best_fit_line(xs, ys):
 
     return m, b
 
+
 def main():
 
     # file where .html should be saved
-    output_file('docs/male_scatter.html', title='Scatterplot: Percentage of Male Students')
+    output_file('docs/male_scatter.html',
+                title='Scatterplot: Percentage of Male Students')
 
     # reads df from file
     df = pd.read_csv('university_ranking.csv', index_col=0)
@@ -47,10 +49,10 @@ def main():
     # all data collected in a dictionary
     data = {
             'ranking': df['ranking'],
-            'male' : df['male'],
+            'male': df['male'],
             'years': year_list,
             'color': colors,
-            'university':df['university_name']
+            'university': df['university_name']
     }
 
     m, b = best_fit_line(df['ranking'], df['male'])

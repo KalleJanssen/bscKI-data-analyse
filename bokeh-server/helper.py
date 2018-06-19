@@ -10,6 +10,7 @@ from bokeh.transform import dodge
 from bokeh.layouts import row, column
 from bokeh.models.widgets import PreText, Select
 
+
 def bar_chart_continent_split():
 
     # reads df from file
@@ -19,12 +20,12 @@ def bar_chart_continent_split():
     df2016 = df.loc[df['year'] == 2016].head(800)
     df2017 = df.loc[df['year'] == 2017].head(800)
     df2018 = df.loc[df['year'] == 2018].head(800)
-    
+
     dfs = [df2016, df2017, df2018]
 
     # continent order that I wanted
-    continents = ['Europe', 'America', 'Asia', 'Oceania', 'Africa']      
-    
+    continents = ['Europe', 'America', 'Asia', 'Oceania', 'Africa']
+
     list = []
 
     # all years
@@ -46,11 +47,10 @@ def bar_chart_continent_split():
     list2018 = [count_2018[key] for key in continents]
 
     # dictionary with data for making a figure
-    data = {'continents' : continents,
-            '2016' : list2016,
-            '2017' : list2017,
-            '2018' : list2018 }
-
+    data = {'continents': continents,
+            '2016': list2016,
+            '2017': list2017,
+            '2018': list2018}
 
     source = ColumnDataSource(data=data)
 
@@ -78,4 +78,3 @@ def bar_chart_continent_split():
     data_frame[['mean', 'std']] = data_frame[['mean', 'std']].astype(int)
 
     return p, data_frame
-

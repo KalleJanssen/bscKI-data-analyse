@@ -5,8 +5,9 @@ from bokeh.io import show, output_file
 from bokeh.models import Legend
 from bokeh.models import HoverTool
 
-# creates a scatterplot for the amount of students per staff, only problem is the points should be commas
 
+# creates a scatterplot for the amount of students per staff,
+# only problem is the points should be commas
 def best_fit_line(xs, ys):
 
     m = (((mean(xs)*mean(ys)) - mean(xs*ys)) /
@@ -15,6 +16,7 @@ def best_fit_line(xs, ys):
     b = mean(ys) - m*mean(xs)
 
     return m, b
+
 
 def main():
 
@@ -48,10 +50,10 @@ def main():
     # all data collected in a dictionary
     data = {
             'ranking': df['ranking'],
-            'no_student_p_staff' : df['no_student_p_staff'],
+            'no_student_p_staff': df['no_student_p_staff'],
             'years': year_list,
             'color': colors,
-            'university':df['university_name']
+            'university': df['university_name']
     }
 
     m, b = best_fit_line(df['ranking'], df['no_student_p_staff'])
@@ -66,14 +68,18 @@ def main():
     hover = HoverTool(
                 tooltips=[('Year', '@years'),
                           ('Ranking', '@ranking'),
-                          ('Amount of Students per Staff', '@no_student_p_staff'),
+                          ('Amount of Students per Staff',
+                           '@no_student_p_staff'),
                           ('University', '@university')],
                 names=['scatter'])
 
-    p = figure(tools=[hover], title="Scatterplot: Amount of Students per Staff Member")
+    p = figure(tools=[hover],
+               title="Scatterplot: Amount of Students per Staff Member")
+
     p.xaxis.axis_label = 'International Ranking'
     p.yaxis.axis_label = 'Amount of Students per Staff Member'
-    p.scatter('ranking', 'no_student_p_staff', source=source, color='color', name='scatter', legend='years')
+    p.scatter('ranking', 'no_student_p_staff', source=source, color='color',
+              name='scatter', legend='years')
     r1 = p.line(x, y, line_width=2, color='black')
     legend = Legend(items=[
                 ("{0}x + {1}".format(m, b), [r1])])

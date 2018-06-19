@@ -26,18 +26,6 @@ codes = ['AFG', 'ALB', 'DZA', 'ASM', 'AND', 'AGO', 'AIA', 'ATG', 'ARG', 'ARM', '
          'THA', 'TLS', 'TGO', 'TON', 'TTO', 'TUN', 'TUR', 'TKM', 'TUV', 'UGA', 'UKR', 
          'ARE', 'GBR', 'USA', 'URY', 'UZB', 'VUT', 'VEN', 'VNM', 'VGB', 'WBG', 'YEM', 
          'ZMB', 'ZWE']
-
-
-plotly.tools.set_credentials_file(username='arnitro', api_key='foCkT4Qrj9x1F73nuvBw')
-
-df = pd.read_csv('university_ranking.csv', index_col=0)
-
-df2016 = df.loc[df['year'] == 2016].head(800)
-df2017 = df.loc[df['year'] == 2017].head(800)
-df2018 = df.loc[df['year'] == 2018].head(800)
-
-dfs = [df2016, df2017, df2018]
-
 converter = coco.CountryConverter()
 
 i = 2016
@@ -47,13 +35,13 @@ for df in dfs:
     country_list = df['country'].tolist()
     df['country_code'] = converter.convert(names=country_list, to='ISO3')
 
-
     country_code = df['country_code'].tolist()
 
     counter = dict(Counter(country_code))
 
     for con_code in codes:
-        if not con_code in counter:
+
+        if con_code not in counter:
             counter[con_code] = 0
         else:
             pass
@@ -61,35 +49,37 @@ for df in dfs:
     code = [key for key in counter]
     count = [counter[key] for key in counter]
 
-    data = [ dict(
-            type = 'choropleth',
-            locations = code,
-            z = count,
-            colorscale = [[0,"rgb(5, 10, 172)"],[0.35,"rgb(40, 60, 190)"],[0.5,"rgb(70, 100, 245)"],\
-                [0.6,"rgb(90, 120, 245)"],[0.7,"rgb(106, 137, 247)"],[1,"rgb(220, 220, 220)"]],
-            autocolorscale = False,
-            reversescale = True,
-            marker = dict(
-                line = dict (
-                    color = 'rgb(180,180,180)',
-                    width = 0.5
-                ) ),
-            colorbar = dict(
-                autotick = False,
-                title = 'Number of universities'),
-          ) ]
+    data = [dict(
+            type='choropleth',
+            locations=code,
+            z=count,
+            colorscale=[[0, "rgb(5, 10, 172)"], [0.35, "rgb(40, 60, 190)"],
+                        [0.5, "rgb(70, 100, 245)"], [0.6, "rgb(90, 120, 245)"],
+                        [0.7, "rgb(106, 137, 247)"],
+                        [1, "rgb(220, 220, 220)"]],
+            autocolorscale=False,
+            reversescale=True,
+            marker=dict(
+                line=dict(
+                    color='rgb(180,180,180)',
+                    width=0.5
+                )),
+            colorbar=dict(
+                autotick=False,
+                title='Number of universities'))]
 
     layout = dict(
-        title = 'Number of universities in top 800 per country per year - ' + str(i),
-        geo = dict(
-            showframe = False,
-            showcoastlines = False,
-            projection = dict(
-                type = 'Mercator'
+        title='Number of universities in top 800 per country per year - ' + str(i),
+        geo=dict(
+            showframe=False,
+            showcoastlines=False,
+            projection=dict(
+                type='Mercator'
             )
         )
     )
 
-    fig = dict( data=data, layout=layout )
-    plotly.offline.plot(fig,validate=False,filename = 'docs/map' + str(i) + '.html')    
+    fig = dict(data=data, layout=layout)
+    plotly.offline.plot(fig, validate=False,
+                        filename='docs/map' + str(i) + '.html')
     i += 1

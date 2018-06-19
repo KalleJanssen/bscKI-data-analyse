@@ -15,10 +15,12 @@ def best_fit_line(xs, ys):
 
     return m, b
 
+
 def main():
 
     # file where .html should be saved
-    output_file('docs/inter_students_scatter.html', title='Scatterplot: International Students')
+    output_file('docs/inter_students_scatter.html', 
+                title='Scatterplot: International Students')
 
     # reads df from file
     df = pd.read_csv('university_ranking.csv', index_col=0)
@@ -51,10 +53,10 @@ def main():
     # all data collected in a dictionary
     data = {
             'ranking': df['ranking'],
-            'pct_intl_student' : df['pct_intl_student'],
+            'pct_intl_student': df['pct_intl_student'],
             'years': year_list,
             'color': colors,
-            'university':df['university_name']
+            'university': df['university_name']
     }
 
     m, b = best_fit_line(df['ranking'], df['pct_intl_student'])
@@ -70,13 +72,14 @@ def main():
                 tooltips=[('Year', '@years'),
                           ('Ranking', '@ranking'),
                           ('% Int. Students', '@pct_intl_student%'),
-                          ('University', '@university')], 
+                          ('University', '@university')],
                 names=['scatter'])
 
     p = figure(tools=[hover], title="Scatterplot: International Students")
     p.xaxis.axis_label = 'International Ranking'
     p.yaxis.axis_label = 'Pct. International Students'
-    p.scatter('ranking', 'pct_intl_student', source=source, color='color', name='scatter', legend='years')
+    p.scatter('ranking', 'pct_intl_student', source=source,
+              color='color', name='scatter', legend='years')
     r1 = p.line(x, y, line_width=2, color='black')
     legend = Legend(items=[
                 ("{0}x + {1}".format(m, b), [r1])])

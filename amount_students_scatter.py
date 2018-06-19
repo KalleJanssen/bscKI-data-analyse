@@ -15,10 +15,12 @@ def best_fit_line(xs, ys):
 
     return m, b
 
+
 def main():
 
     # file where .html should be saved
-    output_file('docs/amount_students_scatter.html', title='Scatterplot: Amount of Students')
+    output_file('docs/amount_students_scatter.html',
+                title='Scatterplot: Amount of Students')
 
     # reads df from file
     df = pd.read_csv('university_ranking.csv', index_col=0)
@@ -34,7 +36,7 @@ def main():
     df = dfs[0].append(dfs[1].append(dfs[2]))
 
     # changes float to integer for more correct scatterplot
-    #df['pct_intl_student'] = df['pct_intl_student'] * 100
+    # df['pct_intl_student'] = df['pct_intl_student'] * 100
     df.no_student = df.no_student.astype(int)
 
     # creates all data we need
@@ -51,10 +53,10 @@ def main():
     # all data collected in a dictionary
     data = {
             'ranking': df['ranking'],
-            'Amount_Students' : df['no_student'],
+            'Amount_Students': df['no_student'],
             'years': year_list,
             'color': colors,
-            'university':df['university_name']
+            'university': df['university_name']
     }
 
     m, b = best_fit_line(df['ranking'], df['no_student'])
@@ -76,7 +78,8 @@ def main():
     p = figure(tools=[hover], title="Scatterplot: Amount of Students")
     p.xaxis.axis_label = 'International Ranking'
     p.yaxis.axis_label = 'Amount of Students'
-    p.scatter('ranking', 'Amount_Students', source=source, color='color', name='scatter', legend='years')
+    p.scatter('ranking', 'Amount_Students', source=source,
+              color='color', name='scatter', legend='years')
     r1 = p.line(x, y, line_width=2, color='black')
     legend = Legend(items=[
                 ("{0}x + {1}".format(m, b), [r1])])
