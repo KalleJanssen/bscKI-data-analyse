@@ -169,16 +169,17 @@ correlation_select = Select(value='Pct. intl. students',
 column_source = ColumnDataSource(data=dict(region=[], list2016=[],
                                  list2017=[], list2018=[]))
 column_bar_split = figure(y_range=(0, 400), x_range=[],
-                          plot_height=250, plot_width=700, tools=[])
+                          plot_height=250, plot_width=700, tools='hover',
+                          tooltips='No. of universities: @$name')
 column_bar_split.vbar(x=dodge('region', -0.25, range=column_bar_split.x_range),
                       top='list2016', width=0.2, source=column_source,
-                      color="#c9d9d3", legend=value("2016"))
+                      color="#c9d9d3", legend=value("2016"), name='list2016')
 column_bar_split.vbar(x=dodge('region',  0.0,  range=column_bar_split.x_range),
                       top='list2017', width=0.2, source=column_source,
-                      color="#718dbf", legend=value("2017"))
+                      color="#718dbf", legend=value("2017"), name='list2017')
 column_bar_split.vbar(x=dodge('region',  0.25, range=column_bar_split.x_range),
                       top='list2018', width=0.2, source=column_source,
-                      color="#e84d60", legend=value("2018"))
+                      color="#e84d60", legend=value("2018"), name='list2018')
 column_bar_split.legend.location = 'top_right'
 column_bar_split.legend.orientation = 'horizontal'
 

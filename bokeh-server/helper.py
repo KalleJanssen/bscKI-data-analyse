@@ -54,17 +54,22 @@ def bar_chart_continent_split():
 
     source = ColumnDataSource(data=data)
 
-    p = figure(x_range=continents, y_range=(0, 450), plot_height=250, plot_width=700, title="University count per continent per year",
-               toolbar_location=None, tools="")
+    p = figure(x_range=continents, y_range=(0, 450), plot_height=250,
+               plot_width=700, title="University count per continent per year",
+               toolbar_location=None, tools="hover",
+               tooltips='No. of universities: @$name')
 
-    p.vbar(x=dodge('continents', -0.25, range=p.x_range), top='2016', width=0.2, source=source,
-           color="#c9d9d3", legend=value("2016"))
+    p.vbar(x=dodge('continents', -0.25, range=p.x_range), top='2016',
+           width=0.2, source=source,
+           color="#c9d9d3", legend=value("2016"), name='2016')
 
-    p.vbar(x=dodge('continents',  0.0,  range=p.x_range), top='2017', width=0.2, source=source,
-           color="#718dbf", legend=value("2017"))
+    p.vbar(x=dodge('continents',  0.0,  range=p.x_range), top='2017',
+           width=0.2, source=source,
+           color="#718dbf", legend=value("2017"), name='2017')
 
-    p.vbar(x=dodge('continents',  0.25, range=p.x_range), top='2018', width=0.2, source=source,
-           color="#e84d60", legend=value("2018"))
+    p.vbar(x=dodge('continents',  0.25, range=p.x_range), top='2018',
+           width=0.2, source=source,
+           color="#e84d60", legend=value("2018"), name='2018')
 
     p.x_range.range_padding = 0.1
     p.xgrid.grid_line_color = None
