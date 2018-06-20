@@ -19,11 +19,11 @@ def best_fit_line(xs, ys):
 def main():
 
     # file where .html should be saved
-    output_file('docs/male_scatter.html',
+    output_file('../docs/male_scatter.html',
                 title='Scatterplot: Percentage of Male Students')
 
     # reads df from file
-    df = pd.read_csv('university_ranking.csv', index_col=0)
+    df = pd.read_csv('../university_ranking.csv', index_col=0)
 
     colormap = {2016: 'red',
                 2017: 'green',

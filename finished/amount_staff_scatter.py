@@ -6,6 +6,8 @@ from bokeh.models import Legend
 from bokeh.models import HoverTool
 
 
+# creates a scatterplot for the amount of students per staff,
+# only problem is the points should be commas
 def best_fit_line(xs, ys):
 
     m = (((mean(xs)*mean(ys)) - mean(xs*ys)) /
@@ -19,11 +21,10 @@ def best_fit_line(xs, ys):
 def main():
 
     # file where .html should be saved
-    output_file('docs/amount_students_scatter.html',
-                title='Scatterplot: Amount of Students')
+    output_file('../docs/amount_staff_scatter.html', title='Scatterplot: Amount of Students per Staff Member')
 
     # reads df from file
-    df = pd.read_csv('university_ranking.csv', index_col=0)
+    df = pd.read_csv('../university_ranking.csv', index_col=0)
 
     colormap = {2016: 'red',
                 2017: 'green',
@@ -34,10 +35,6 @@ def main():
     # gets top 800 for every year and puts into list
     dfs = [df.loc[df['year'] == year].head(200) for year in years]
     df = dfs[0].append(dfs[1].append(dfs[2]))
-
-    # changes float to integer for more correct scatterplot
-    # df['pct_intl_student'] = df['pct_intl_student'] * 100
-    df.no_student = df.no_student.astype(int)
 
     # creates all data we need
     year_list = []
@@ -53,13 +50,13 @@ def main():
     # all data collected in a dictionary
     data = {
             'ranking': df['ranking'],
-            'Amount_Students': df['no_student'],
+            'no_student_p_staff': df['no_student_p_staff'],
             'years': year_list,
             'color': colors,
             'university': df['university_name']
     }
 
-    m, b = best_fit_line(df['ranking'], df['no_student'])
+    m, b = best_fit_line(df['ranking'], df['no_student_p_staff'])
     m = round(m, 4)
     b = round(b, 4)
 
@@ -71,15 +68,18 @@ def main():
     hover = HoverTool(
                 tooltips=[('Year', '@years'),
                           ('Ranking', '@ranking'),
-                          ('Amount of Students', '@Amount_Students'),
+                          ('Amount of Students per Staff',
+                           '@no_student_p_staff'),
                           ('University', '@university')],
                 names=['scatter'])
 
-    p = figure(tools=[hover], title="Scatterplot: Amount of Students")
+    p = figure(tools=[hover],
+               title="Scatterplot: Amount of Students per Staff Member")
+
     p.xaxis.axis_label = 'International Ranking'
-    p.yaxis.axis_label = 'Amount of Students'
-    p.scatter('ranking', 'Amount_Students', source=source,
-              color='color', name='scatter', legend='years')
+    p.yaxis.axis_label = 'Amount of Students per Staff Member'
+    p.scatter('ranking', 'no_student_p_staff', source=source, color='color',
+              name='scatter', legend='years')
     r1 = p.line(x, y, line_width=2, color='black')
     legend = Legend(items=[
                 ("{0}x + {1}".format(m, b), [r1])])

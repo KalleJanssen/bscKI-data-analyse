@@ -19,11 +19,11 @@ def best_fit_line(xs, ys):
 def main():
 
     # file where .html should be saved
-    output_file('docs/inter_students_scatter.html', 
-                title='Scatterplot: International Students')
+    output_file('../docs/amount_students_scatter.html',
+                title='Scatterplot: Amount of Students')
 
     # reads df from file
-    df = pd.read_csv('university_ranking.csv', index_col=0)
+    df = pd.read_csv('../university_ranking.csv', index_col=0)
 
     colormap = {2016: 'red',
                 2017: 'green',
@@ -32,19 +32,19 @@ def main():
     years = [2016, 2017, 2018]
 
     # gets top 800 for every year and puts into list
-    dfs = [df.loc[df['year'] == year].head(800) for year in years]
+    dfs = [df.loc[df['year'] == year].head(200) for year in years]
     df = dfs[0].append(dfs[1].append(dfs[2]))
 
     # changes float to integer for more correct scatterplot
-    df['pct_intl_student'] = df['pct_intl_student'] * 100
-    df.pct_intl_student = df.pct_intl_student.astype(int)
+    # df['pct_intl_student'] = df['pct_intl_student'] * 100
+    df.no_student = df.no_student.astype(int)
 
     # creates all data we need
     year_list = []
 
     # creates list of years for every datapoint
     for year in years:
-        for i in range(800):
+        for i in range(200):
             year_list.append(year)
 
     # creates list of colors for every datapoint
@@ -53,17 +53,17 @@ def main():
     # all data collected in a dictionary
     data = {
             'ranking': df['ranking'],
-            'pct_intl_student': df['pct_intl_student'],
+            'Amount_Students': df['no_student'],
             'years': year_list,
             'color': colors,
             'university': df['university_name']
     }
 
-    m, b = best_fit_line(df['ranking'], df['pct_intl_student'])
+    m, b = best_fit_line(df['ranking'], df['no_student'])
     m = round(m, 4)
     b = round(b, 4)
 
-    x = [i for i in range(801)]
+    x = [i for i in range(201)]
     y = [m * x + b for x in range(len(x))]
 
     source = ColumnDataSource(data)
@@ -71,14 +71,14 @@ def main():
     hover = HoverTool(
                 tooltips=[('Year', '@years'),
                           ('Ranking', '@ranking'),
-                          ('% Int. Students', '@pct_intl_student%'),
+                          ('Amount of Students', '@Amount_Students'),
                           ('University', '@university')],
                 names=['scatter'])
 
-    p = figure(tools=[hover], title="Scatterplot: International Students")
+    p = figure(tools=[hover], title="Scatterplot: Amount of Students")
     p.xaxis.axis_label = 'International Ranking'
-    p.yaxis.axis_label = 'Pct. International Students'
-    p.scatter('ranking', 'pct_intl_student', source=source,
+    p.yaxis.axis_label = 'Amount of Students'
+    p.scatter('ranking', 'Amount_Students', source=source,
               color='color', name='scatter', legend='years')
     r1 = p.line(x, y, line_width=2, color='black')
     legend = Legend(items=[
