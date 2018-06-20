@@ -94,6 +94,7 @@ def get_data_correlation(variable):
                         'No. of students per staffmember': 'no_student_p_staff'
                         }
     variable = column_text_dict[variable]
+
     df = pd.read_csv('../university_ranking.csv')
     years = [2016, 2017, 2018]
 
@@ -101,7 +102,7 @@ def get_data_correlation(variable):
     dfs = [df.loc[df['year'] == year].head(800) for year in years]
     df = dfs[0].append(dfs[1].append(dfs[2]))
 
-    coi = ['ranking', variable, 'year']
+    coi = ['ranking', variable, 'year', 'university_name']
     df = df[coi]
     data = df.copy()
     colormap = {2016: 'red',
@@ -138,7 +139,8 @@ def update_correlation():
     correlation_source.data = correlation_source.from_df(data[['ranking',
                                                                'variable',
                                                                'years',
-                                                               'color']])
+                                                               'color',
+                                                               'university_name']])
     line_source.data = line_source.from_df(line_data[['x', 'y']])
     correlation.title.text = ('Correlation between ranking and '
                               + variable.lower())
@@ -182,13 +184,14 @@ column_bar_split.legend.orientation = 'horizontal'
 
 # Correlation Between Ranking and Selected Value
 correlation_source = ColumnDataSource(data=dict(ranking=[], variable=[],
-                                      color=[], years=[]))
+                                      color=[], years=[], university_name=[]))
 line_source = ColumnDataSource(data=dict(x=[], y=[]))
 
 # hover for scatterplot
 hover = HoverTool(
             tooltips=[('Year', '@years'),
                       ('Ranking', '@ranking'),
+                      ('university', '@university_name'),
                       ('Variable', '@variable')],
             names=['scatter'])
 
@@ -210,10 +213,11 @@ static_col, static_table_data = helper.bar_chart_continent_split()
 static_table.text = str(static_table_data)
 
 # lays out the widgets and columns
-widgets = column(continent_select, table)
-main_row = row(column_bar_split, widgets, correlation_select)
-secondary_row = row(static_col, static_table, correlation)
-layout = column(main_row, secondary_row)
+correlation_column = column(correlation_select, correlation)
+non_static_row = row(column_bar_split, table)
+static_row = row(static_col, static_table)
+main_column = column(continent_select, non_static_row, static_row)
+layout = row(main_column, correlation_column)
 
 # initial update
 update_bar_chart()
