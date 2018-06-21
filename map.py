@@ -27,6 +27,14 @@ codes = ['AFG', 'ALB', 'DZA', 'ASM', 'AND', 'AGO', 'AIA', 'ATG', 'ARG', 'ARM', '
          'ARE', 'GBR', 'USA', 'URY', 'UZB', 'VUT', 'VEN', 'VNM', 'VGB', 'WBG', 'YEM', 
          'ZMB', 'ZWE']
 converter = coco.CountryConverter()
+plotly.tools.set_credentials_file(username='arnitro', api_key='foCkT4Qrj9x1F73nuvBw')
+ 
+df = pd.read_csv('university_ranking.csv', index_col=0)
+df2016 = df.loc[df['year'] == 2016].head(800)
+df2017 = df.loc[df['year'] == 2017].head(800)
+df2018 = df.loc[df['year'] == 2018].head(800)
+
+dfs = [df2016, df2017, df2018]
 
 i = 2016
 
