@@ -5,6 +5,7 @@ from bokeh.plotting import figure
 from bokeh.transform import dodge
 from bokeh.models import Panel, ColumnDataSource, HoverTool
 
+
 def main():
 
     # reads df from file

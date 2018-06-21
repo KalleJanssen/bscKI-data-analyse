@@ -30,6 +30,7 @@ converter = coco.CountryConverter()
 
 i = 2016
 
+
 for df in dfs:
 
     country_list = df['country'].tolist()

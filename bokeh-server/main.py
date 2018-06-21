@@ -6,7 +6,9 @@ from collections import Counter
 from bokeh.core.properties import value
 from bokeh.io import show, output_file, curdoc
 from bokeh.models import ColumnDataSource, HoverTool
-from bokeh.plotting import figure
+from bokeh.models import FactorRange, Range1d, Plot
+from bokeh.models import Rect, CategoricalAxis, LinearAxis, GlyphRenderer
+from bokeh.plotting import figure, gridplot
 from bokeh.transform import dodge
 from bokeh.layouts import row, column, layout
 from bokeh.models.widgets import PreText, Select
@@ -99,7 +101,7 @@ def get_data_correlation(variable):
     years = [2016, 2017, 2018]
 
     # gets top 800 for every year and puts into list
-    dfs = [df.loc[df['year'] == year].head(800) for year in years]
+    dfs = [df.loc[df['year'] == year].head(200) for year in years]
     df = dfs[0].append(dfs[1].append(dfs[2]))
 
     coi = ['ranking', variable, 'year', 'university_name']
@@ -112,13 +114,13 @@ def get_data_correlation(variable):
 
     year_list = []
     for year in years:
-        for i in range(800):
+        for i in range(200):
             year_list.append(year)
     data['color'] = colors
     data['years'] = year_list
     data.rename(columns={variable: 'variable'}, inplace=True)
     m, b = best_fit_line(data['ranking'], data['variable'])
-    x = [i for i in range(800)]
+    x = [i for i in range(200)]
     y = [m * x + b for x in range(len(x))]
     line_data = pd.DataFrame()
     line_data['x'] = x
@@ -148,6 +150,33 @@ def update_correlation():
     correlation.yaxis.axis_label = variable
 
 
+def year_change(attrname, old, new):
+
+    update_pyramid()
+
+
+def data_pyramid(year):
+
+    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = df.loc[df['year'] == year].head(200)
+    coi = ['ranking', 'male', 'female', 'university_name']
+    data = df.copy()
+    data = data[coi]
+    data['midmale'] = data['male']/2
+    data['midfemale'] = data['female']/2
+
+    return data
+
+
+def update_pyramid():
+
+    year = int(year_select.value)
+    data = data_pyramid(year)
+    coi = ['ranking', 'male', 'female', 'midmale', 'midfemale',
+           'university_name']
+    pyramid_source.data = pyramid_source.from_df(data[coi])
+
+
 # set up widgets
 table = PreText(text='', width=500)
 static_table = PreText(text='', width=500)
@@ -161,11 +190,14 @@ correlation_select = Select(value='Pct. intl. students',
                                      'No. of students',
                                      'No. of students per staffmember'])
 
+year_select = Select(value='2016', options=['2016', '2017', '2018'])
 
 ########################################
 # ********** SET UP PLOTS  *********** #
 ########################################
-# Column Bar Plot
+# # # # # # # # # #
+# Column Bar Plot #
+# # # # # # # # # #
 column_source = ColumnDataSource(data=dict(region=[], list2016=[],
                                  list2017=[], list2018=[]))
 column_bar_split = figure(y_range=(0, 400), x_range=[],
@@ -183,7 +215,9 @@ column_bar_split.vbar(x=dodge('region',  0.25, range=column_bar_split.x_range),
 column_bar_split.legend.location = 'top_right'
 column_bar_split.legend.orientation = 'horizontal'
 
-# Correlation Between Ranking and Selected Value
+# # # # # # # # # # # #  # # # # # #  # # # # # ##
+# Correlation Between Ranking and Selected Value #
+# # # # # # # # # # # # # # # # # # # # # # # # ##
 correlation_source = ColumnDataSource(data=dict(ranking=[], variable=[],
                                       color=[], years=[], university_name=[]))
 line_source = ColumnDataSource(data=dict(x=[], y=[]))
@@ -197,7 +231,7 @@ hover = HoverTool(
             names=['scatter'])
 
 # scatterplot + best fit line for correlation between variable and ranking
-correlation = figure(tools=[hover], title='', plot_width=500, plot_height=600)
+correlation = figure(tools=[hover], title='', plot_width=600, plot_height=600)
 correlation.xaxis.axis_label = "International Ranking"
 correlation.yaxis.axis_label = ""
 correlation.scatter('ranking', 'variable', source=correlation_source,
@@ -205,9 +239,50 @@ correlation.scatter('ranking', 'variable', source=correlation_source,
 correlation.line('x', 'y', line_width=2, color='black',
                  source=line_source)
 
+# # # # # # # # # # # # # # # # #
+# Pyramid chart men-women split #
+# # # # # # # # # # # # # # # # #
+pyramid_source = ColumnDataSource(data=dict(ranking=[], male=[], female=[],
+                                  university_name=[], midfemale=[], midmale=[]))
+pyramid_hover = HoverTool(tooltips=[('Ranking', '@ranking'),
+                                    ('% male students', '@male%'),
+                                    ('% female students', '@female%'),
+                                    ('University', '@university_name')])
+pyramid_left = figure(tools=[pyramid_hover], title='male',
+                      x_range=Range1d(100, 0),
+                      y_range=Range1d(0, 200), plot_height=400, plot_width=200)
+pyramid_right = figure(tools=[pyramid_hover], title='female',
+                       x_range=Range1d(0, 100),
+                       y_range=Range1d(0, 200), plot_height=400,
+                       plot_width=200)
+
+pyramid_right.yaxis.visible = False
+
+pyramid_left_rect = Rect(y='ranking',
+                         x='midmale',
+                         width='male',
+                         height=0.8,
+                         fill_color='#b3cde3',
+                         line_color=None)
+pyramid_right_rect = Rect(y='ranking',
+                          x='midfemale',
+                          width='female',
+                          height=0.8,
+                          fill_color='#fbb4ae',
+                          line_color=None)
+left_glyph = GlyphRenderer(data_source=pyramid_source, glyph=pyramid_left_rect)
+right_glyph = GlyphRenderer(data_source=pyramid_source, glyph=pyramid_right_rect)
+
+pyramid_left.renderers.extend([left_glyph])
+pyramid_right.renderers.extend([right_glyph])
+
+pyramid_left.min_border_right = 0
+pyramid_right.min_border_left = 0
+
 # on change switch values
 continent_select.on_change('value', drop_change)
 correlation_select.on_change('value', correlation_change)
+year_select.on_change('value', year_change)
 
 # gets static plot and table string from helper.py
 static_col, static_table_data = helper.bar_chart_continent_split()
@@ -218,11 +293,16 @@ correlation_column = column(correlation_select, correlation)
 non_static_row = row(column_bar_split, table)
 static_row = row(static_col, static_table)
 main_column = column(continent_select, non_static_row, static_row)
-layout = row(main_column, correlation_column)
+pyramid_plot = gridplot([[pyramid_left, pyramid_right]], border_space=0)
+pyramid_column = column(year_select, pyramid_plot)
+main_row = row(main_column, correlation_column)
+secondary_row = row(pyramid_column)
+layout = column(main_row, secondary_row)
 
 # initial update
 update_bar_chart()
 update_correlation()
+update_pyramid()
 
 curdoc().add_root(layout)
 curdoc().title = 'Region Split'
