@@ -10,8 +10,8 @@ from bokeh.models import FactorRange, Range1d, Plot
 from bokeh.models import Rect, CategoricalAxis, LinearAxis, GlyphRenderer
 from bokeh.plotting import figure, gridplot
 from bokeh.transform import dodge
-from bokeh.layouts import row, column, layout
-from bokeh.models.widgets import PreText, Select
+from bokeh.layouts import row, column, layout, widgetbox
+from bokeh.models.widgets import PreText, Select, Slider
 
 
 def best_fit_line(xs, ys):
@@ -155,10 +155,10 @@ def year_change(attrname, old, new):
     update_pyramid()
 
 
-def data_pyramid(year):
+def data_pyramid(year, head):
 
     df = pd.read_csv('../university_ranking.csv', index_col=0)
-    df = df.loc[df['year'] == year].head(200)
+    df = df.loc[df['year'] == year].head(head)
     coi = ['ranking', 'male', 'female', 'university_name']
     data = df.copy()
     data = data[coi]
@@ -170,11 +170,15 @@ def data_pyramid(year):
 
 def update_pyramid():
 
+    head = range_slider.value
     year = int(year_select.value)
-    data = data_pyramid(year)
+    data = data_pyramid(year, head)
     coi = ['ranking', 'male', 'female', 'midmale', 'midfemale',
            'university_name']
     pyramid_source.data = pyramid_source.from_df(data[coi])
+    # dynamically change height somehow
+    pyramid_left_rect.height = 1
+    pyramid_right_rect.height = 1
 
 
 # set up widgets
@@ -191,7 +195,8 @@ correlation_select = Select(value='Pct. intl. students',
                                      'No. of students per staffmember'])
 
 year_select = Select(value='2016', options=['2016', '2017', '2018'])
-
+range_slider = Slider(start=1, end=200, step=1, value=1,
+                      title='No. of universities')
 ########################################
 # ********** SET UP PLOTS  *********** #
 ########################################
@@ -243,7 +248,8 @@ correlation.line('x', 'y', line_width=2, color='black',
 # Pyramid chart men-women split #
 # # # # # # # # # # # # # # # # #
 pyramid_source = ColumnDataSource(data=dict(ranking=[], male=[], female=[],
-                                  university_name=[], midfemale=[], midmale=[]))
+                                  university_name=[], midfemale=[],
+                                  midmale=[]))
 pyramid_hover = HoverTool(tooltips=[('Ranking', '@ranking'),
                                     ('% male students', '@male%'),
                                     ('% female students', '@female%'),
@@ -283,6 +289,7 @@ pyramid_right.min_border_left = 0
 continent_select.on_change('value', drop_change)
 correlation_select.on_change('value', correlation_change)
 year_select.on_change('value', year_change)
+range_slider.on_change('value', year_change)
 
 # gets static plot and table string from helper.py
 static_col, static_table_data = helper.bar_chart_continent_split()
@@ -294,7 +301,8 @@ non_static_row = row(column_bar_split, table)
 static_row = row(static_col, static_table)
 main_column = column(continent_select, non_static_row, static_row)
 pyramid_plot = gridplot([[pyramid_left, pyramid_right]], border_space=0)
-pyramid_column = column(year_select, pyramid_plot)
+pyramid_widget_box = widgetbox(year_select, range_slider)
+pyramid_column = column(pyramid_widget_box, pyramid_plot)
 main_row = row(main_column, correlation_column)
 secondary_row = row(pyramid_column)
 layout = column(main_row, secondary_row)
