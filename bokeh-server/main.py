@@ -239,7 +239,7 @@ hover = HoverTool(
             names=['scatter'])
 
 # scatterplot + best fit line for correlation between variable and ranking
-correlation = figure(tools=[hover], title='', plot_width=600, plot_height=600)
+correlation = figure(tools=[hover, 'save'], title='', plot_width=600, plot_height=600)
 correlation.xaxis.axis_label = "International Ranking"
 correlation.yaxis.axis_label = ""
 correlation.scatter('ranking', 'variable', source=correlation_source,
