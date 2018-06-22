@@ -138,11 +138,12 @@ def update_correlation():
 
     variable = correlation_select.value
     data, line_data = get_data_correlation(variable)
-    correlation_source.data = correlation_source.from_df(data[['ranking',
-                                                               'variable',
-                                                               'years',
-                                                               'color',
-                                                               'university_name']])
+    correlation_source.data = correlation_source.from_df(data[
+                                                         ['ranking',
+                                                          'variable',
+                                                          'years',
+                                                          'color',
+                                                          'university_name']])
     line_source.data = line_source.from_df(line_data[['x', 'y']])
     correlation.title.text = ('Correlation between ranking and '
                               + variable.lower())
@@ -177,8 +178,10 @@ def update_pyramid():
            'university_name']
     pyramid_source.data = pyramid_source.from_df(data[coi])
     # dynamically change height somehow
-    pyramid_left_rect.height = 1
-    pyramid_right_rect.height = 1
+    pyramid_left.y_range.start = 0
+    pyramid_left.y_range.end = head
+    pyramid_right.y_range.start = 0
+    pyramid_right.y_range.end = head
 
 
 # set up widgets
@@ -195,7 +198,7 @@ correlation_select = Select(value='Pct. intl. students',
                                      'No. of students per staffmember'])
 
 year_select = Select(value='2016', options=['2016', '2017', '2018'])
-range_slider = Slider(start=1, end=200, step=1, value=1,
+range_slider = Slider(start=20, end=200, step=1, value=20,
                       title='No. of universities')
 ########################################
 # ********** SET UP PLOTS  *********** #
@@ -255,11 +258,11 @@ pyramid_hover = HoverTool(tooltips=[('Ranking', '@ranking'),
                                     ('% female students', '@female%'),
                                     ('University', '@university_name')])
 pyramid_left = figure(tools=[pyramid_hover], title='male',
-                      x_range=Range1d(100, 0),
-                      y_range=Range1d(0, 200), plot_height=400, plot_width=200)
+                      x_range=(100, 0),
+                      y_range=(0, 200), plot_height=400, plot_width=200)
 pyramid_right = figure(tools=[pyramid_hover], title='female',
-                       x_range=Range1d(0, 100),
-                       y_range=Range1d(0, 200), plot_height=400,
+                       x_range=(0, 100),
+                       y_range=(0, 200), plot_height=400,
                        plot_width=200)
 
 pyramid_right.yaxis.visible = False
@@ -276,8 +279,10 @@ pyramid_right_rect = Rect(y='ranking',
                           height=0.8,
                           fill_color='#fbb4ae',
                           line_color=None)
-left_glyph = GlyphRenderer(data_source=pyramid_source, glyph=pyramid_left_rect)
-right_glyph = GlyphRenderer(data_source=pyramid_source, glyph=pyramid_right_rect)
+left_glyph = GlyphRenderer(data_source=pyramid_source,
+                           glyph=pyramid_left_rect)
+right_glyph = GlyphRenderer(data_source=pyramid_source,
+                            glyph=pyramid_right_rect)
 
 pyramid_left.renderers.extend([left_glyph])
 pyramid_right.renderers.extend([right_glyph])
