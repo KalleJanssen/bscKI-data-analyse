@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from numpy import histogram
 import helper
 from statistics import mean
 from collections import Counter
@@ -184,28 +185,44 @@ def update_pyramid():
     pyramid_right.y_range.end = head
 
 
-# set up widgets
-table = PreText(text='', width=500)
-static_table = PreText(text='', width=500)
-continent_select = Select(value='America', options=['America', 'Europe',
-                                                    'Asia', 'Oceania',
-                                                    'Africa'])
+def hist_year_change(attrname, old, new):
 
-correlation_select = Select(value='Pct. intl. students',
-                            options=['Pct. intl. students',
-                                     'Share of students that are male',
-                                     'No. of students',
-                                     'No. of students per staffmember'])
+    update_histogram()
 
-year_select = Select(value='2016', options=['2016', '2017', '2018'])
-range_slider = Slider(start=20, end=200, step=1, value=20,
-                      title='No. of universities')
+
+def update_histogram():
+
+    year = int(hist_year_select.value)
+    arr_hist, edges = data_histogram(year)
+    df = pd.DataFrame({'score_overall': arr_hist,
+                       'left': edges[:-1],
+                       'right': edges[1:]})
+    histogram_source.data = histogram_source.from_df(df)
+    histogram_figure.title.text = 'Histogram of scores in ' + str(year)
+
+
+def data_histogram(year):
+
+    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = df.loc[df['year'] == year]
+    data = df.copy()
+    arr_hist, edges = np.histogram(data['score_overall'],
+                                   bins=int(100/2),
+                                   range=[0, 100])
+    return arr_hist, edges
+
+
 ########################################
 # ********** SET UP PLOTS  *********** #
 ########################################
 # # # # # # # # # #
 # Column Bar Plot #
 # # # # # # # # # #
+table = PreText(text='', width=500)
+static_table = PreText(text='', width=500)
+continent_select = Select(value='America', options=['America', 'Europe',
+                                                    'Asia', 'Oceania',
+                                                    'Africa'])
 column_source = ColumnDataSource(data=dict(region=[], list2016=[],
                                  list2017=[], list2018=[]))
 column_bar_split = figure(y_range=(0, 400), x_range=[],
@@ -229,7 +246,11 @@ column_bar_split.legend.orientation = 'horizontal'
 correlation_source = ColumnDataSource(data=dict(ranking=[], variable=[],
                                       color=[], years=[], university_name=[]))
 line_source = ColumnDataSource(data=dict(x=[], y=[]))
-
+correlation_select = Select(value='Pct. intl. students',
+                            options=['Pct. intl. students',
+                                     'Share of students that are male',
+                                     'No. of students',
+                                     'No. of students per staffmember'])
 # hover for scatterplot
 hover = HoverTool(
             tooltips=[('Year', '@years'),
@@ -239,7 +260,10 @@ hover = HoverTool(
             names=['scatter'])
 
 # scatterplot + best fit line for correlation between variable and ranking
-correlation = figure(tools=[hover, 'save'], title='', plot_width=600, plot_height=600)
+correlation = figure(tools=[hover, 'save'],
+                     title='',
+                     plot_width=600,
+                     plot_height=600)
 correlation.xaxis.axis_label = "International Ranking"
 correlation.yaxis.axis_label = ""
 correlation.scatter('ranking', 'variable', source=correlation_source,
@@ -250,6 +274,9 @@ correlation.line('x', 'y', line_width=2, color='black',
 # # # # # # # # # # # # # # # # #
 # Pyramid chart men-women split #
 # # # # # # # # # # # # # # # # #
+year_select = Select(value='2016', options=['2016', '2017', '2018'])
+range_slider = Slider(start=20, end=200, step=1, value=20,
+                      title='No. of universities')
 pyramid_source = ColumnDataSource(data=dict(ranking=[], male=[], female=[],
                                   university_name=[], midfemale=[],
                                   midmale=[]))
@@ -290,11 +317,32 @@ pyramid_right.renderers.extend([right_glyph])
 pyramid_left.min_border_right = 0
 pyramid_right.min_border_left = 0
 
+# # # # # # # # # ##
+# Grade Histograms #
+# # # # # # # # # ##
+hist_year_select = Select(value='2016', options=['2016', '2017', '2018'])
+histogram_source = ColumnDataSource(data=dict(score_overall=[],
+                                              left=[],
+                                              right=[]))
+histogram_hover = HoverTool(tooltips=[('Score', '@left - @right'),
+                                      ('# of universities', '@score_overall')])
+histogram_figure = figure(plot_width=500, plot_height=600,
+                          x_axis_label='Overall grade',
+                          y_axis_label='Amount of Universities',
+                          tools=[histogram_hover])
+
+histogram_figure.quad(source=histogram_source, bottom=0, fill_alpha=0.75,
+                      top='score_overall', left='left', right='right',
+                      fill_color='red', line_color='black',
+                      hover_fill_alpha=1.0, hover_fill_color='navy')
+histogram_figure.add_tools(histogram_hover)
+
 # on change switch values
 continent_select.on_change('value', drop_change)
 correlation_select.on_change('value', correlation_change)
 year_select.on_change('value', year_change)
 range_slider.on_change('value', year_change)
+hist_year_select.on_change('value', hist_year_change)
 
 # gets static plot and table string from helper.py
 static_col, static_table_data = helper.bar_chart_continent_split()
@@ -308,7 +356,8 @@ main_column = column(continent_select, non_static_row, static_row)
 pyramid_plot = gridplot([[pyramid_left, pyramid_right]], border_space=0)
 pyramid_widget_box = widgetbox(year_select, range_slider)
 pyramid_column = column(pyramid_widget_box, pyramid_plot)
-main_row = row(main_column, correlation_column)
+hist_column = column(hist_year_select, histogram_figure)
+main_row = row(main_column, correlation_column, hist_column)
 secondary_row = row(pyramid_column)
 layout = column(main_row, secondary_row)
 
@@ -316,6 +365,7 @@ layout = column(main_row, secondary_row)
 update_bar_chart()
 update_correlation()
 update_pyramid()
+update_histogram()
 
 curdoc().add_root(layout)
-curdoc().title = 'Region Split'
+curdoc().title = 'Interactive Data Visualisation'
