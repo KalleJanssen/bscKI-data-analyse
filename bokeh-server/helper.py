@@ -14,7 +14,7 @@ from bokeh.models.widgets import PreText, Select
 def bar_chart_continent_split():
 
     # reads df from file
-    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = pd.read_csv('bokeh-server/static/university_ranking.csv', index_col=0)
 
     # splits data-frame into top 800 data-frames per year
     df2016 = df.loc[df['year'] == 2016].head(800)
@@ -56,8 +56,7 @@ def bar_chart_continent_split():
 
     p = figure(x_range=continents, y_range=(0, 450), plot_height=250,
                plot_width=700, title="University count per continent per year",
-               toolbar_location=None, tools="hover",
-               tooltips='No. of universities: @$name')
+               tools=['hover', 'save'], tooltips='No. of universities: @$name')
 
     p.vbar(x=dodge('continents', -0.25, range=p.x_range), top='2016',
            width=0.2, source=source,

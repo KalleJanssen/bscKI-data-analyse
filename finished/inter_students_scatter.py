@@ -16,6 +16,11 @@ def best_fit_line(xs, ys):
     return m, b
 
 
+def mse(y, y_pred):
+
+    return np.mean((y - y_pred)**2)
+
+
 def main():
 
     # file where .html should be saved
