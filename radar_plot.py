@@ -19,15 +19,15 @@ def normalize(df, column):
     return ((df[column] - df[column].min()) / (df[column].max() - df[column].min()))
 
 
-def unit_poly_verts(theta, centre ):
+def unit_poly_verts(theta, centre):
     # Return vertices of polygon for subplot axes.
     # This polygon is circumscribed by a unit circle centered at (0.5, 0.5)
-    x0, y0, r = [centre ] * 3
+    x0, y0, r = [centre] * 3
     verts = [(r*np.cos(t) + x0, r*np.sin(t) + y0) for t in theta]
     return verts
 
 
-def radar_patch(r, theta, centre ):
+def radar_patch(r, theta, centre):
     # Returns the x and y coordinates corresponding to the magnitudes of
     # each variable displayed in the radar plot
     # offset from centre of circle
@@ -97,10 +97,10 @@ def radar_plot_avg(df, year):
 
     df = df.copy()
 
-    p = figure(title="Average radar plot of all ranked universities in " + 
+    p = figure(title="Average radar plot of all ranked universities in " +
                str(year), x_range=(0, 1.24))
 
-    text = ['No. of Students per staff member', 'Male', 
+    text = ['No. of Students per staff member', 'Male',
             '% Int. Students', 'No. of Students', '']
 
     source = ColumnDataSource({'x': x + [centre], 'y': y + [1], 'text': text})
