@@ -138,7 +138,6 @@ def get_data_correlation(variable):
     b = round(b, 2)
     formulas = ['{0}x + {1}'.format(m, b) for _ in range(len(x))]
     line_data['formula'] = formulas
-    print(line_data)
 
     return data, line_data
 
