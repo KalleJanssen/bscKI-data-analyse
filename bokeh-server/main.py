@@ -205,7 +205,8 @@ def hist_year_change(attrname, old, new):
 def update_histogram():
 
     year = int(hist_year_select.value)
-    arr_hist, edges = data_histogram(year)
+    arr_hist, edges, mean, median, mode = data_histogram(year)
+    hist_mean_median.text = 'Mean: {0}\nMedian: {1}'.format(mean, median, mode)
     df = pd.DataFrame({'score_overall': arr_hist,
                        'left': edges[:-1],
                        'right': edges[1:]})
@@ -221,7 +222,10 @@ def data_histogram(year):
     arr_hist, edges = np.histogram(data['score_overall'],
                                    bins=int(100/2),
                                    range=[0, 100])
-    return arr_hist, edges
+    mean = data['score_overall'].mean()
+    median = data['score_overall'].median()
+    mode = data['score_overall'].mode()
+    return arr_hist, edges, mean, median, mode
 
 
 def maphandler(attr, old, new):
@@ -339,7 +343,9 @@ pyramid_right.min_border_left = 0
 # # # # # # # # # ##
 # Grade Histograms #
 # # # # # # # # # ##
-hist_year_select = Select(value='2016', options=['2016', '2017', '2018'])
+hist_year_select = Slider(start=2016, end=2018, step=1, value=2016,
+                          title='Year:')
+hist_mean_median = PreText(text='')
 histogram_source = ColumnDataSource(data=dict(score_overall=[],
                                               left=[],
                                               right=[]))
@@ -385,7 +391,7 @@ main_column = column(continent_select, non_static_row, static_row)
 pyramid_plot = gridplot([[pyramid_left, pyramid_right]], border_space=0)
 pyramid_widget_box = widgetbox(year_select, range_slider)
 pyramid_column = column(pyramid_widget_box, pyramid_plot)
-hist_column = column(hist_year_select, histogram_figure)
+hist_column = column(hist_year_select, histogram_figure, hist_mean_median)
 main_row = row(main_column, correlation_column, hist_column)
 map_column = column(map_dropdown, div)
 secondary_row = row(pyramid_column, map_column)
