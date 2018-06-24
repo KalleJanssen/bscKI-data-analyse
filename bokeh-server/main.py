@@ -6,13 +6,18 @@ from statistics import mean
 from collections import Counter
 from bokeh.core.properties import value
 from bokeh.io import show, output_file, curdoc
-from bokeh.models import ColumnDataSource, HoverTool
+from bokeh.models import ColumnDataSource, HoverTool, Legend
 from bokeh.models import FactorRange, Range1d, Plot
 from bokeh.models import Rect, CategoricalAxis, LinearAxis, GlyphRenderer
 from bokeh.plotting import figure, gridplot
 from bokeh.transform import dodge
 from bokeh.layouts import row, column, layout, widgetbox
-from bokeh.models.widgets import PreText, Select, Slider
+from bokeh.models.widgets import PreText, Select, Slider, Div, Dropdown
+
+
+def meansqerror(y, y_pred):
+
+    return np.mean((y - y_pred)**2)
 
 
 def best_fit_line(xs, ys):
@@ -56,7 +61,7 @@ def update_table(data):
 
 def get_data_bar_chart(continent):
 
-    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = pd.read_csv('bokeh-server/static/university_ranking.csv', index_col=0)
 
     df = df.loc[df['continent'] == continent]
 
@@ -98,7 +103,7 @@ def get_data_correlation(variable):
                         }
     variable = column_text_dict[variable]
 
-    df = pd.read_csv('../university_ranking.csv')
+    df = pd.read_csv('bokeh-server/static/university_ranking.csv')
     years = [2016, 2017, 2018]
 
     # gets top 800 for every year and puts into list
@@ -126,6 +131,14 @@ def get_data_correlation(variable):
     line_data = pd.DataFrame()
     line_data['x'] = x
     line_data['y'] = y
+    if variable == 'pct_intl_student':
+        m = round(m, 4)
+    else:
+        m = round(m, 2)
+    b = round(b, 2)
+    formulas = ['{0}x + {1}'.format(m, b) for _ in range(len(x))]
+    line_data['formula'] = formulas
+    print(line_data)
 
     return data, line_data
 
@@ -145,7 +158,7 @@ def update_correlation():
                                                           'years',
                                                           'color',
                                                           'university_name']])
-    line_source.data = line_source.from_df(line_data[['x', 'y']])
+    line_source.data = line_source.from_df(line_data[['x', 'y', 'formula']])
     correlation.title.text = ('Correlation between ranking and '
                               + variable.lower())
 
@@ -159,7 +172,7 @@ def year_change(attrname, old, new):
 
 def data_pyramid(year, head):
 
-    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = pd.read_csv('bokeh-server/static/university_ranking.csv', index_col=0)
     df = df.loc[df['year'] == year].head(head)
     coi = ['ranking', 'male', 'female', 'university_name']
     data = df.copy()
@@ -203,13 +216,18 @@ def update_histogram():
 
 def data_histogram(year):
 
-    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = pd.read_csv('bokeh-server/static/university_ranking.csv', index_col=0)
     df = df.loc[df['year'] == year]
     data = df.copy()
     arr_hist, edges = np.histogram(data['score_overall'],
                                    bins=int(100/2),
                                    range=[0, 100])
     return arr_hist, edges
+
+
+def maphandler(attr, old, new):
+
+    div.text = new
 
 
 ########################################
@@ -226,7 +244,8 @@ continent_select = Select(value='America', options=['America', 'Europe',
 column_source = ColumnDataSource(data=dict(region=[], list2016=[],
                                  list2017=[], list2018=[]))
 column_bar_split = figure(y_range=(0, 400), x_range=[],
-                          plot_height=250, plot_width=700, tools='hover',
+                          plot_height=250, plot_width=700,
+                          tools=['hover', 'save'],
                           tooltips='No. of universities: @$name')
 column_bar_split.vbar(x=dodge('region', -0.25, range=column_bar_split.x_range),
                       top='list2016', width=0.2, source=column_source,
@@ -245,7 +264,7 @@ column_bar_split.legend.orientation = 'horizontal'
 # # # # # # # # # # # # # # # # # # # # # # # # ##
 correlation_source = ColumnDataSource(data=dict(ranking=[], variable=[],
                                       color=[], years=[], university_name=[]))
-line_source = ColumnDataSource(data=dict(x=[], y=[]))
+line_source = ColumnDataSource(data=dict(x=[], y=[], formula=[]))
 correlation_select = Select(value='Pct. intl. students',
                             options=['Pct. intl. students',
                                      'Share of students that are male',
@@ -263,13 +282,13 @@ hover = HoverTool(
 correlation = figure(tools=[hover, 'save'],
                      title='',
                      plot_width=600,
-                     plot_height=600)
+                     plot_height=500)
 correlation.xaxis.axis_label = "International Ranking"
 correlation.yaxis.axis_label = ""
 correlation.scatter('ranking', 'variable', source=correlation_source,
                     color='color', name='scatter', legend='years')
-correlation.line('x', 'y', line_width=2, color='black',
-                 source=line_source)
+correlation.line('x', 'y', line_width=2, color='black', legend='formula',
+                      source=line_source)
 
 # # # # # # # # # # # # # # # # #
 # Pyramid chart men-women split #
@@ -284,12 +303,12 @@ pyramid_hover = HoverTool(tooltips=[('Ranking', '@ranking'),
                                     ('% male students', '@male%'),
                                     ('% female students', '@female%'),
                                     ('University', '@university_name')])
-pyramid_left = figure(tools=[pyramid_hover], title='male',
+pyramid_left = figure(tools=[pyramid_hover, 'save'], title='male',
                       x_range=(100, 0),
-                      y_range=(0, 200), plot_height=400, plot_width=200)
+                      y_range=(0, 200), plot_height=500, plot_width=200)
 pyramid_right = figure(tools=[pyramid_hover], title='female',
                        x_range=(0, 100),
-                       y_range=(0, 200), plot_height=400,
+                       y_range=(0, 200), plot_height=500,
                        plot_width=200)
 
 pyramid_right.yaxis.visible = False
@@ -326,10 +345,10 @@ histogram_source = ColumnDataSource(data=dict(score_overall=[],
                                               right=[]))
 histogram_hover = HoverTool(tooltips=[('Score', '@left - @right'),
                                       ('# of universities', '@score_overall')])
-histogram_figure = figure(plot_width=500, plot_height=600,
+histogram_figure = figure(plot_width=500, plot_height=500,
                           x_axis_label='Overall grade',
                           y_axis_label='Amount of Universities',
-                          tools=[histogram_hover])
+                          tools=[histogram_hover, 'save'])
 
 histogram_figure.quad(source=histogram_source, bottom=0, fill_alpha=0.75,
                       top='score_overall', left='left', right='right',
@@ -337,12 +356,22 @@ histogram_figure.quad(source=histogram_source, bottom=0, fill_alpha=0.75,
                       hover_fill_alpha=1.0, hover_fill_color='navy')
 histogram_figure.add_tools(histogram_hover)
 
+# # # # # # #
+# world map #
+# # # # # # #
+div = Div(text="<img src='/bokeh-server/static/map2016.png'>")
+menu = [("2016", "<img src='/bokeh-server/static/map2016.png'>"),
+        ("2017", "<img src='/bokeh-server/static/map2017.png'>"),
+        ("2018", "<img src='/bokeh-server/static/map2018.png'>")]
+map_dropdown = Dropdown(label='Select a year:', menu=menu)
+
 # on change switch values
 continent_select.on_change('value', drop_change)
 correlation_select.on_change('value', correlation_change)
 year_select.on_change('value', year_change)
 range_slider.on_change('value', year_change)
 hist_year_select.on_change('value', hist_year_change)
+map_dropdown.on_change('value', maphandler)
 
 # gets static plot and table string from helper.py
 static_col, static_table_data = helper.bar_chart_continent_split()
@@ -358,7 +387,8 @@ pyramid_widget_box = widgetbox(year_select, range_slider)
 pyramid_column = column(pyramid_widget_box, pyramid_plot)
 hist_column = column(hist_year_select, histogram_figure)
 main_row = row(main_column, correlation_column, hist_column)
-secondary_row = row(pyramid_column)
+map_column = column(map_dropdown, div)
+secondary_row = row(pyramid_column, map_column)
 layout = column(main_row, secondary_row)
 
 # initial update
