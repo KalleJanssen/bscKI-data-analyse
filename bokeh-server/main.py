@@ -287,8 +287,9 @@ correlation.xaxis.axis_label = "International Ranking"
 correlation.yaxis.axis_label = ""
 correlation.scatter('ranking', 'variable', source=correlation_source,
                     color='color', name='scatter', legend='years')
-correlation.line('x', 'y', line_width=2, color='black', legend='formula',
-                      source=line_source)
+correlation.line('x', 'y', line_width=2, color='black',
+                 legend='formula',
+                 source=line_source)
 
 # # # # # # # # # # # # # # # # #
 # Pyramid chart men-women split #
