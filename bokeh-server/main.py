@@ -95,20 +95,20 @@ def get_data_bar_chart(continent):
 
 def get_data_correlation(variable):
 
-    column_text_dict = {
+    input_converter = {
                         'Pct. intl. students': 'pct_intl_student',
                         'Share of students that are male': 'male',
                         'No. of students': 'no_student',
                         'No. of students per staffmember': 'no_student_p_staff'
                         }
-    variable = column_text_dict[variable]
+    variable = input_converter[variable]
 
     df = pd.read_csv('bokeh-server/static/university_ranking.csv')
     years = [2016, 2017, 2018]
 
     # gets top 800 for every year and puts into list
-    dfs = [df.loc[df['year'] == year].head(200) for year in years]
-    df = dfs[0].append(dfs[1].append(dfs[2]))
+    df_list = [df.loc[df['year'] == year].head(200) for year in years]
+    df = df_list[0].append(df_list[1].append(df_list[2]))
 
     coi = ['ranking', variable, 'year', 'university_name']
     df = df[coi]
@@ -157,11 +157,11 @@ def update_correlation():
                                                           'years',
                                                           'color',
                                                           'university_name']])
-    line_source.data = line_source.from_df(line_data[['x', 'y', 'formula']])
-    hover.tooltips = [('Year', '@years'),
-                      ('Ranking', '@ranking'),
-                      ('university', '@university_name'),
-                      (variable, '@variable')]
+    bfs_line_source.data = bfs_line_source.from_df(line_data[['x', 'y', 'formula']])
+    correlation_hover.tooltips = [('Year', '@years'),
+                                  ('Ranking', '@ranking'),
+                                  ('university', '@university_name'),
+                                  (variable, '@variable')]
     correlation.title.text = ('Correlation between ranking and '
                               + variable.lower())
 
@@ -170,14 +170,14 @@ def update_correlation():
 
 def get_data_gdp_correlation(variable):
 
-    column_text_dict = {'Ranking': 'ranking',
+    input_converter = {'Ranking': 'ranking',
                         'Overall score': 'score_overall',
                         'Citation score': 'score_citation',
                         'Industry score': 'score_industry',
                         'Int. outlook score': 'score_int_outlook',
                         'Research score': 'score_research',
                         'Teaching score': 'score_teaching'}
-    variable = column_text_dict[variable]
+    variable = input_converter[variable]
     df = pd.read_csv('bokeh-server/static/gdp_avg_score.csv')
 
     coi = ['gdp', variable, 'country']
@@ -205,18 +205,18 @@ def gdp_correlation_change(attrname, old, new):
 
 def update_gdp_correlation():
 
-    variable = gdp_corr_select.value
+    variable = gdp_correlation_select.value
     data, line_data = get_data_gdp_correlation(variable)
     gdp_corr_source.data = gdp_corr_source.from_df(data[['gdp', 'variable',
                                                          'country']])
-    gdp_line_source.data = gdp_line_source.from_df(line_data[['x', 'y',
+    gdp_bfs_line_source.data = gdp_bfs_line_source.from_df(line_data[['x', 'y',
                                                              'formula']])
-    gdp_corr.title.text = ('Correlation between gdp (2014) and average ' +
-                           variable.lower())
+    gdp_correlation.title.text = ('Correlation between gdp (2014) and average ' +
+                                  variable.lower())
     gdp_hover.tooltips = [('Country', '@country'),
                           (variable, '@variable'),
                           ('GDP', '@gdp')]
-    gdp_corr.yaxis.axis_label = variable
+    gdp_correlation.yaxis.axis_label = variable
 
 
 def year_change(attrname, old, new):
@@ -224,7 +224,7 @@ def year_change(attrname, old, new):
     update_pyramid()
 
 
-def data_pyramid(year, head):
+def get_data_pyramid(year, head):
 
     df = pd.read_csv('bokeh-server/static/university_ranking.csv', index_col=0)
     df = df.loc[df['year'] == year].head(head)
@@ -239,9 +239,9 @@ def data_pyramid(year, head):
 
 def update_pyramid():
 
-    head = range_slider.value
-    year = int(year_select.value)
-    data = data_pyramid(year, head)
+    head = pyramid_xaxis_slider.value
+    year = int(pyramid_year_select.value)
+    data = get_data_pyramid(year, head)
     coi = ['ranking', 'male', 'female', 'midmale', 'midfemale',
            'university_name']
     pyramid_source.data = pyramid_source.from_df(data[coi])
@@ -262,11 +262,11 @@ def hist_year_change(attrname, old, new):
 
 def update_histogram():
 
-    year = int(hist_year_select.value)
-    arr_hist, edges, mean, median, mode = data_histogram(year)
-    hist_mean_median.text = 'Mean: {0}\nMedian: {1}\nMode: {2}'.format(mean,
-                                                                       median,
-                                                                       mode)
+    year = int(histogram_year_select.value)
+    arr_hist, edges, mean, median, mode = get_data_histogram(year)
+    histogram_mean_median.text = 'Mean: {0}\nMedian: {1}\nMode: {2}'.format(mean,
+                                                                            median,
+                                                                            mode)
     df = pd.DataFrame({'score_overall': arr_hist,
                        'left': edges[:-1],
                        'right': edges[1:]})
@@ -274,7 +274,7 @@ def update_histogram():
     histogram_figure.title.text = 'Histogram of scores in ' + str(year)
 
 
-def data_histogram(year):
+def get_data_histogram(year):
 
     df = pd.read_csv('bokeh-server/static/university_ranking.csv', index_col=0)
     df = df.loc[df['year'] == year]
@@ -289,9 +289,9 @@ def data_histogram(year):
     return arr_hist, edges, mean, median, mode
 
 
-def maphandler(attr, old, new):
+def map_handler(attr, old, new):
 
-    div.text = new
+    world_map_div.text = new
 
 
 ########################################
@@ -328,14 +328,14 @@ column_bar_split.legend.orientation = 'horizontal'
 # # # # # # # # # # # # # # # # # # # # # # # # ##
 correlation_source = ColumnDataSource(data=dict(ranking=[], variable=[],
                                       color=[], years=[], university_name=[]))
-line_source = ColumnDataSource(data=dict(x=[], y=[], formula=[]))
+bfs_line_source = ColumnDataSource(data=dict(x=[], y=[], formula=[]))
 correlation_select = Select(value='Pct. intl. students',
                             options=['Pct. intl. students',
                                      'Share of students that are male',
                                      'No. of students',
                                      'No. of students per staffmember'])
 # hover for scatterplot
-hover = HoverTool(
+correlation_hover = HoverTool(
             tooltips=[('Year', '@years'),
                       ('Ranking', '@ranking'),
                       ('university', '@university_name'),
@@ -343,7 +343,7 @@ hover = HoverTool(
             names=['scatter'])
 
 # scatterplot + best fit line for correlation between variable and ranking
-correlation = figure(tools=[hover, 'save'],
+correlation = figure(tools=[correlation_hover, 'save'],
                      title='',
                      plot_width=600,
                      plot_height=500,
@@ -354,43 +354,43 @@ correlation.scatter('ranking', 'variable', source=correlation_source,
                     color='color', name='scatter', legend='years')
 correlation.line('x', 'y', line_width=2, color='black',
                  legend='formula',
-                 source=line_source)
+                 source=bfs_line_source)
 
 # # # # # # # # # # # #  # # # # # #  #
 # Correlation Between Ranking and gdp #
 # # # # # # # # # # # # # # # # # # # #
 gdp_corr_source = ColumnDataSource(data=dict(gdp=[], variable=[], country=[]))
-gdp_line_source = ColumnDataSource(data=dict(x=[], y=[], formula=[]))
-gdp_corr_select = Select(value='Ranking',
-                         options=['Ranking', 'Overall score',
-                                  'Citation score', 'Industry score',
-                                  'Int. outlook score',
-                                  'Research score', 'Teaching score'])
-# hover for scatterplot
+gdp_bfs_line_source = ColumnDataSource(data=dict(x=[], y=[], formula=[]))
+gdp_correlation_select = Select(value='Ranking',
+                                options=['Ranking', 'Overall score',
+                                         'Citation score', 'Industry score',
+                                         'Int. outlook score',
+                                         'Research score', 'Teaching score'])
+# hover for scatter-plot
 gdp_hover = HoverTool(
             tooltips=[('Country', '@country'),
                       ('Variable', '@variable'),
                       ('GDP', '@gdp')],
             names=['scatter_gdp'])
-gdp_corr = figure(tools=[gdp_hover, 'save'],
-                  title='',
-                  plot_width=500,
-                  plot_height=486,
-                  toolbar_location='above')
-gdp_corr.xaxis.axis_label = 'GDP in billions'
-gdp_corr.yaxis.axis_label = ''
-gdp_corr.scatter('gdp', 'variable', source=gdp_corr_source,
-                 name='scatter_gdp')
-gdp_corr.line('x', 'y', line_width=2, color='black',
-              legend='formula', source=gdp_line_source)
+gdp_correlation = figure(tools=[gdp_hover, 'save'],
+                         title='',
+                         plot_width=500,
+                         plot_height=486,
+                         toolbar_location='above')
+gdp_correlation.xaxis.axis_label = 'GDP in billions'
+gdp_correlation.yaxis.axis_label = ''
+gdp_correlation.scatter('gdp', 'variable', source=gdp_corr_source,
+                        name='scatter_gdp')
+gdp_correlation.line('x', 'y', line_width=2, color='black',
+                     legend='formula', source=gdp_bfs_line_source)
 
 # # # # # # # # # # # # # # # # #
 # Pyramid chart men-women split #
 # # # # # # # # # # # # # # # # #
-year_select = Select(value='2016', options=['2016', '2017', '2018'])
-range_slider = Slider(start=20, end=200, step=1, value=20,
-                      title='No. of universities', orientation='vertical',
-                      height=400)
+pyramid_year_select = Select(value='2016', options=['2016', '2017', '2018'])
+pyramid_xaxis_slider = Slider(start=20, end=200, step=1, value=20,
+                              title='No. of universities', orientation='vertical',
+                              height=400)
 pyramid_source = ColumnDataSource(data=dict(ranking=[], male=[], female=[],
                                   university_name=[], midfemale=[],
                                   midmale=[]))
@@ -434,9 +434,9 @@ pyramid_right.min_border_left = 0
 # # # # # # # # # ##
 # Grade Histograms #
 # # # # # # # # # ##
-hist_year_select = Slider(start=2016, end=2018, step=1, value=2016,
-                          title='Year:')
-hist_mean_median = PreText(text='')
+histogram_year_select = Slider(start=2016, end=2018, step=1, value=2016,
+                               title='Year:')
+histogram_mean_median = PreText(text='')
 histogram_source = ColumnDataSource(data=dict(score_overall=[],
                                               left=[],
                                               right=[]))
@@ -456,7 +456,7 @@ histogram_figure.add_tools(histogram_hover)
 # # # # # # #
 # world map #
 # # # # # # #
-div = Div(text="<img src='/bokeh-server/static/map2016.png'>")
+world_map_div = Div(text="<img src='/bokeh-server/static/map2016.png'>")
 menu = [("2016", "<img src='/bokeh-server/static/map2016.png'>"),
         ("2017", "<img src='/bokeh-server/static/map2017.png'>"),
         ("2018", "<img src='/bokeh-server/static/map2018.png'>")]
@@ -465,11 +465,11 @@ map_dropdown = Dropdown(label='Select a year:', menu=menu)
 # on change switch values
 continent_select.on_change('value', drop_change)
 correlation_select.on_change('value', correlation_change)
-year_select.on_change('value', year_change)
-range_slider.on_change('value', year_change)
-hist_year_select.on_change('value', hist_year_change)
-map_dropdown.on_change('value', maphandler)
-gdp_corr_select.on_change('value', gdp_correlation_change)
+pyramid_year_select.on_change('value', year_change)
+pyramid_xaxis_slider.on_change('value', year_change)
+histogram_year_select.on_change('value', hist_year_change)
+map_dropdown.on_change('value', map_handler)
+gdp_correlation_select.on_change('value', gdp_correlation_change)
 
 # gets static plot and table string from helper.py
 static_col, static_table_data = helper.bar_chart_continent_split()
@@ -478,21 +478,21 @@ static_table.text = str(static_table_data)
 # lays out the widgets and columss
 non_static_row = row(column_bar_split, table)
 static_row = row(static_col, static_table)
-map_column = column(map_dropdown, div)
+map_column = column(map_dropdown, world_map_div)
 
 
 correlation_column = column(correlation_select, correlation)
 main_column = column(continent_select, non_static_row, static_row)
 pyramid_plot = gridplot([[pyramid_left, pyramid_right]],
                         border_space=0)
-pyramid_plot_slider = row(pyramid_plot, range_slider)
-pyramid_column = column(year_select, pyramid_plot_slider)
+pyramid_plot_slider = row(pyramid_plot, pyramid_xaxis_slider)
+pyramid_column = column(pyramid_year_select, pyramid_plot_slider)
 pyramid_row = row(pyramid_column)
 correlations_200 = row(correlation_column, pyramid_row)
 
-histogram_figure_mean_median = row(histogram_figure, hist_mean_median)
-hist_column = column(hist_year_select, histogram_figure)
-gdp_column = column(gdp_corr_select, gdp_corr)
+histogram_figure_mean_median = row(histogram_figure, histogram_mean_median)
+hist_column = column(histogram_year_select, histogram_figure)
+gdp_column = column(gdp_correlation_select, gdp_correlation)
 further_row = row(hist_column, gdp_column)
 
 rest_column = column(correlations_200, further_row)
