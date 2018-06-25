@@ -243,6 +243,9 @@ def update_pyramid():
     pyramid_left.y_range.end = head
     pyramid_right.y_range.start = 0
     pyramid_right.y_range.end = head
+    pyramid_left.xaxis.axis_label = '% of male students'
+    pyramid_right.xaxis.axis_label = '% of female students'
+    pyramid_left.yaxis.axis_label = 'University rank'
 
 
 def hist_year_change(attrname, old, new):
