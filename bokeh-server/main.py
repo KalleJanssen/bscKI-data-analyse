@@ -164,6 +164,54 @@ def update_correlation():
     correlation.yaxis.axis_label = variable
 
 
+def get_data_gdp_correlation(variable):
+
+    column_text_dict = {'Ranking': 'ranking',
+                        'Overall score': 'score_overall',
+                        'Citation score': 'score_citation',
+                        'Industry score': 'score_industry',
+                        'Int. outlook score': 'score_int_outlook',
+                        'Research score': 'score_research',
+                        'Teaching score': 'score_teaching'}
+    variable = column_text_dict[variable]
+    df = pd.read_csv('bokeh-server/static/gdp_avg_score.csv')
+
+    coi = ['gdp', variable, 'country']
+    data = df.copy()
+    data = data[coi]
+    data.rename(columns={variable: 'variable'}, inplace=True)
+    m, b = best_fit_line(data['gdp'], data['variable'])
+    x = [i for i in range(18000)]
+    y = [m * x + b for x in range(len(x))]
+    line_data = pd.DataFrame()
+    line_data['x'] = x
+    line_data['y'] = y
+    m = round(m, 6)
+    b = round(b, 2)
+    formulas = ['{0}x + {1}'.format(m, b) for _ in range(len(x))]
+    line_data['formula'] = formulas
+
+    return data, line_data
+
+
+def gdp_correlation_change(attrname, old, new):
+
+    update_gdp_correlation()
+
+
+def update_gdp_correlation():
+
+    variable = gdp_corr_select.value
+    data, line_data = get_data_gdp_correlation(variable)
+    gdp_corr_source.data = gdp_corr_source.from_df(data[['gdp', 'variable',
+                                                         'country']])
+    gdp_line_source.data = gdp_line_source.from_df(line_data[['x', 'y',
+                                                             'formula']])
+    gdp_corr.title.text = ('Correlation between gdp (2014) and average ' +
+                           variable.lower())
+    gdp_corr.yaxis.axis_label = variable
+
+
 def year_change(attrname, old, new):
 
     update_pyramid()
@@ -298,6 +346,34 @@ correlation.line('x', 'y', line_width=2, color='black',
                  legend='formula',
                  source=line_source)
 
+# # # # # # # # # # # #  # # # # # #  #
+# Correlation Between Ranking and gdp #
+# # # # # # # # # # # # # # # # # # # #
+gdp_corr_source = ColumnDataSource(data=dict(gdp=[], variable=[], country=[]))
+gdp_line_source = ColumnDataSource(data=dict(x=[], y=[], formula=[]))
+gdp_corr_select = Select(value='Ranking',
+                         options=['Ranking', 'Overall score',
+                                  'Citation score', 'Industry score',
+                                  'Int. outlook score',
+                                  'Research score', 'Teaching score'])
+# hover for scatterplot
+gdp_hover = HoverTool(
+            tooltips=[('Country', '@country'),
+                      ('Variable', '@variable'),
+                      ('GDP', '@gdp')],
+            names=['scatter_gdp'])
+gdp_corr = figure(tools=[gdp_hover, 'save'],
+                  title='',
+                  plot_width=500,
+                  plot_height=486,
+                  toolbar_location='above')
+gdp_corr.xaxis.axis_label = 'GDP in billions'
+gdp_corr.yaxis.axis_label = ''
+gdp_corr.scatter('gdp', 'variable', source=gdp_corr_source,
+                 name='scatter_gdp')
+gdp_corr.line('x', 'y', line_width=2, color='black',
+              legend='formula', source=gdp_line_source)
+
 # # # # # # # # # # # # # # # # #
 # Pyramid chart men-women split #
 # # # # # # # # # # # # # # # # #
@@ -383,6 +459,7 @@ year_select.on_change('value', year_change)
 range_slider.on_change('value', year_change)
 hist_year_select.on_change('value', hist_year_change)
 map_dropdown.on_change('value', maphandler)
+gdp_corr_select.on_change('value', gdp_correlation_change)
 
 # gets static plot and table string from helper.py
 static_col, static_table_data = helper.bar_chart_continent_split()
@@ -404,8 +481,9 @@ pyramid_row = row(pyramid_column)
 correlations_200 = row(correlation_column, pyramid_row)
 
 histogram_figure_mean_median = row(histogram_figure, hist_mean_median)
-hist_column = column(hist_year_select, histogram_figure_mean_median)
-further_row = row(hist_column)
+hist_column = column(hist_year_select, histogram_figure)
+gdp_column = column(gdp_corr_select, gdp_corr)
+further_row = row(hist_column, gdp_column)
 
 rest_column = column(correlations_200, further_row)
 regions_column = column(non_static_row, static_row, map_column)
@@ -417,6 +495,7 @@ update_bar_chart()
 update_correlation()
 update_pyramid()
 update_histogram()
+update_gdp_correlation()
 
 curdoc().add_root(layout)
 curdoc().title = 'Interactive Data Visualisation'
