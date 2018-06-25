@@ -11,6 +11,8 @@ For the server to run properly please ensure that your current bokeh installatio
 1. git clone git@github.com:DanielPerezJensen/bscKI-data-analyse.git
 2. cd bscKI-data-analyse
 3. bokeh serve bokeh-server
+4. In your webbrowser navigate to: http://localhost:<**PORT**>/bokeh-server
+5. The port might be different on your machine, look in your shell to see the exact link.
 
 All data was retrieved from [timeshighereducation](https://www.timeshighereducation.com/world-university-rankings/2018/world-ranking)
 
