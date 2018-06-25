@@ -489,7 +489,7 @@ gdp_column = column(gdp_corr_select, gdp_corr)
 further_row = row(hist_column, gdp_column)
 
 rest_column = column(correlations_200, further_row)
-regions_column = column(non_static_row, static_row, map_column)
+regions_column = column(main_column, map_column)
 
 layout = row(regions_column, rest_column)
 
