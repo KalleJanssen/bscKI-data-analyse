@@ -158,6 +158,10 @@ def update_correlation():
                                                           'color',
                                                           'university_name']])
     line_source.data = line_source.from_df(line_data[['x', 'y', 'formula']])
+    hover.tooltips = [('Year', '@years'),
+                      ('Ranking', '@ranking'),
+                      ('university', '@university_name'),
+                      (variable, '@variable')]
     correlation.title.text = ('Correlation between ranking and '
                               + variable.lower())
 
@@ -209,6 +213,9 @@ def update_gdp_correlation():
                                                              'formula']])
     gdp_corr.title.text = ('Correlation between gdp (2014) and average ' +
                            variable.lower())
+    gdp_hover.tooltips = [('Country', '@country'),
+                          (variable, '@variable'),
+                          ('GDP', '@gdp')]
     gdp_corr.yaxis.axis_label = variable
 
 
