@@ -206,7 +206,9 @@ def update_histogram():
 
     year = int(hist_year_select.value)
     arr_hist, edges, mean, median, mode = data_histogram(year)
-    hist_mean_median.text = 'Mean: {0}\nMedian: {1}'.format(mean, median, mode)
+    hist_mean_median.text = 'Mean: {0}\nMedian: {1}\nMode: {2}'.format(mean,
+                                                                       median,
+                                                                       mode)
     df = pd.DataFrame({'score_overall': arr_hist,
                        'left': edges[:-1],
                        'right': edges[1:]})
@@ -222,9 +224,10 @@ def data_histogram(year):
     arr_hist, edges = np.histogram(data['score_overall'],
                                    bins=int(100/2),
                                    range=[0, 100])
-    mean = data['score_overall'].mean()
-    median = data['score_overall'].median()
-    mode = data['score_overall'].mode()
+    mean = round(data['score_overall'].mean(), 1)
+    median = round(data['score_overall'].median(), 1)
+    data['score_overall'] = data.score_overall.astype(int)
+    mode = data['score_overall'].mode()[0]
     return arr_hist, edges, mean, median, mode
 
 
@@ -285,7 +288,8 @@ hover = HoverTool(
 correlation = figure(tools=[hover, 'save'],
                      title='',
                      plot_width=600,
-                     plot_height=500)
+                     plot_height=500,
+                     toolbar_location='above')
 correlation.xaxis.axis_label = "International Ranking"
 correlation.yaxis.axis_label = ""
 correlation.scatter('ranking', 'variable', source=correlation_source,
@@ -299,7 +303,8 @@ correlation.line('x', 'y', line_width=2, color='black',
 # # # # # # # # # # # # # # # # #
 year_select = Select(value='2016', options=['2016', '2017', '2018'])
 range_slider = Slider(start=20, end=200, step=1, value=20,
-                      title='No. of universities')
+                      title='No. of universities', orientation='vertical',
+                      height=400)
 pyramid_source = ColumnDataSource(data=dict(ranking=[], male=[], female=[],
                                   university_name=[], midfemale=[],
                                   midmale=[]))
@@ -307,12 +312,12 @@ pyramid_hover = HoverTool(tooltips=[('Ranking', '@ranking'),
                                     ('% male students', '@male%'),
                                     ('% female students', '@female%'),
                                     ('University', '@university_name')])
-pyramid_left = figure(tools=[pyramid_hover, 'save'], title='male',
-                      x_range=(100, 0),
-                      y_range=(0, 200), plot_height=500, plot_width=200)
-pyramid_right = figure(tools=[pyramid_hover], title='female',
-                       x_range=(0, 100),
-                       y_range=(0, 200), plot_height=500,
+pyramid_left = figure(title='male',
+                      x_range=(100, 0), tools=[pyramid_hover, 'save'],
+                      y_range=(0, 200), plot_height=470, plot_width=200)
+pyramid_right = figure(title='female',
+                       x_range=(0, 100), tools=[pyramid_hover, 'save'],
+                       y_range=(0, 200), plot_height=470,
                        plot_width=200)
 
 pyramid_right.yaxis.visible = False
@@ -383,19 +388,29 @@ map_dropdown.on_change('value', maphandler)
 static_col, static_table_data = helper.bar_chart_continent_split()
 static_table.text = str(static_table_data)
 
-# lays out the widgets and columns
-correlation_column = column(correlation_select, correlation)
+# lays out the widgets and columss
 non_static_row = row(column_bar_split, table)
 static_row = row(static_col, static_table)
-main_column = column(continent_select, non_static_row, static_row)
-pyramid_plot = gridplot([[pyramid_left, pyramid_right]], border_space=0)
-pyramid_widget_box = widgetbox(year_select, range_slider)
-pyramid_column = column(pyramid_widget_box, pyramid_plot)
-hist_column = column(hist_year_select, histogram_figure, hist_mean_median)
-main_row = row(main_column, correlation_column, hist_column)
 map_column = column(map_dropdown, div)
-secondary_row = row(pyramid_column, map_column)
-layout = column(main_row, secondary_row)
+
+
+correlation_column = column(correlation_select, correlation)
+main_column = column(continent_select, non_static_row, static_row)
+pyramid_plot = gridplot([[pyramid_left, pyramid_right]],
+                        border_space=0)
+pyramid_plot_slider = row(pyramid_plot, range_slider)
+pyramid_column = column(year_select, pyramid_plot_slider)
+pyramid_row = row(pyramid_column)
+correlations_200 = row(correlation_column, pyramid_row)
+
+histogram_figure_mean_median = row(histogram_figure, hist_mean_median)
+hist_column = column(hist_year_select, histogram_figure_mean_median)
+further_row = row(hist_column)
+
+rest_column = column(correlations_200, further_row)
+regions_column = column(non_static_row, static_row, map_column)
+
+layout = row(regions_column, rest_column)
 
 # initial update
 update_bar_chart()
