@@ -6,6 +6,10 @@ Be aware, this is not the full interactive website, to be able to interact with 
 #### Running bokeh server
 To run the interactive portion of our website please follow these instructions:
 
+Prerequisites:
+* install bokeh:
+* pip install -U bokeh --user
+
 For the server to run properly please ensure that your current bokeh installation is 13.0 or above.
 
 1. git clone git@github.com:DanielPerezJensen/bscKI-data-analyse.git
