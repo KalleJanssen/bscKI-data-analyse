@@ -212,7 +212,7 @@ def update_gdp_correlation():
                                                          'country']])
     gdp_bfs_line_source.data = (gdp_bfs_line_source
                                 .from_df(line_data[['x', 'y', 'formula']]))
-    gdp_correlation.title.text = ('Correlation between gdp (2014)' +
+    gdp_correlation.title.text = ('Correlation between gdp (2014) ' +
                                   'and average ' + variable.lower())
     gdp_hover.tooltips = [('Country', '@country'),
                           (variable, '@variable'),
@@ -345,8 +345,8 @@ correlation_hover = HoverTool(
 # scatterplot + best fit line for correlation between variable and ranking
 correlation = figure(tools=[correlation_hover, 'save'],
                      title='',
-                     plot_width=600,
-                     plot_height=500,
+                     plot_width=500,
+                     plot_height=450,
                      toolbar_location='above')
 correlation.xaxis.axis_label = "International Ranking"
 correlation.yaxis.axis_label = ""
@@ -375,7 +375,7 @@ gdp_hover = HoverTool(
 gdp_correlation = figure(tools=[gdp_hover, 'save'],
                          title='',
                          plot_width=500,
-                         plot_height=486,
+                         plot_height=386,
                          toolbar_location='above')
 gdp_correlation.xaxis.axis_label = 'GDP in billions'
 gdp_correlation.yaxis.axis_label = ''
@@ -400,11 +400,11 @@ pyramid_hover = HoverTool(tooltips=[('Ranking', '@ranking'),
                                     ('University', '@university_name')])
 pyramid_left = figure(title='male',
                       x_range=(100, 0), tools=[pyramid_hover, 'save'],
-                      y_range=(0, 200), plot_height=470, plot_width=200)
+                      y_range=(0, 200), plot_height=420, plot_width=180)
 pyramid_right = figure(title='female',
                        x_range=(0, 100), tools=[pyramid_hover, 'save'],
-                       y_range=(0, 200), plot_height=470,
-                       plot_width=200)
+                       y_range=(0, 200), plot_height=420,
+                       plot_width=180)
 
 pyramid_right.yaxis.visible = False
 
@@ -442,10 +442,11 @@ histogram_source = ColumnDataSource(data=dict(score_overall=[],
                                               right=[]))
 histogram_hover = HoverTool(tooltips=[('Score', '@left - @right'),
                                       ('# of universities', '@score_overall')])
-histogram_figure = figure(plot_width=500, plot_height=500,
+histogram_figure = figure(plot_width=500, plot_height=400,
                           x_axis_label='Overall grade',
                           y_axis_label='Amount of Universities',
-                          tools=[histogram_hover, 'save'])
+                          tools=[histogram_hover, 'save'],
+                          toolbar_location='above')
 
 histogram_figure.quad(source=histogram_source, bottom=0, fill_alpha=0.75,
                       top='score_overall', left='left', right='right',
@@ -462,6 +463,13 @@ menu = [("2016", "<img src='/bokeh-server/static/map2016.png'>"),
         ("2018", "<img src='/bokeh-server/static/map2018.png'>")]
 map_dropdown = Dropdown(label='Select a year:', menu=menu)
 
+question_1 = Div(text='<h2>What universities/countries/regions/continents ' +
+                      'are the most consistent through the years, and ' +
+                      'which regions are least consistent?</h2>',
+                 width=1000, height=100)
+question_2 = Div(text='<h2>Are there any noteworthy differences/anomalies ' +
+                      'in the top 200 universities of the world?</h2>',
+                 width=1000, height=100)
 # on change switch values
 continent_select.on_change('value', drop_change)
 correlation_select.on_change('value', correlation_change)
@@ -479,16 +487,17 @@ static_table.text = str(static_table_data)
 non_static_row = row(column_bar_split, table)
 static_row = row(static_col, static_table)
 map_column = column(map_dropdown, world_map_div)
-
+main_column = column(continent_select, non_static_row, static_row)
+main_column = column(question_1, main_column)
 
 correlation_column = column(correlation_select, correlation)
-main_column = column(continent_select, non_static_row, static_row)
 pyramid_plot = gridplot([[pyramid_left, pyramid_right]],
                         border_space=0)
 pyramid_plot_slider = row(pyramid_plot, pyramid_xaxis_slider)
 pyramid_column = column(pyramid_year_select, pyramid_plot_slider)
 pyramid_row = row(pyramid_column)
 correlations_200 = row(correlation_column, pyramid_row)
+correlations_200 = column(question_2, correlations_200)
 
 histogram_figure_mean_median = row(histogram_figure, histogram_mean_median)
 hist_column = column(histogram_year_select, histogram_figure)
