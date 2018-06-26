@@ -41,7 +41,7 @@ def main():
         # Set up the ranges, plot, and axes
         bar_height = 0.8
         max_value = 100
-        ydr = Range1d(0,200)
+        ydr = Range1d(0, 200)
         xdr_left = Range1d(max_value, 0)
         xdr_right = Range1d(0, max_value)
         plot_height = 400

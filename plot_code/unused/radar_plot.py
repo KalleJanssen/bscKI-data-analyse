@@ -140,7 +140,7 @@ def main():
 
     output_file('docs/radar_plot.html')
 
-    df = pd.read_csv('university_ranking.csv')
+    df = pd.read_csv('../../university_ranking.csv')
 
     years = [2016, 2017, 2018]
 

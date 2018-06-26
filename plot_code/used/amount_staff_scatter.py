@@ -21,7 +21,8 @@ def best_fit_line(xs, ys):
 def main():
 
     # file where .html should be saved
-    output_file('../docs/amount_staff_scatter.html', title='Scatterplot: Amount of Students per Staff Member')
+    output_file('../../docs/amount_staff_scatter.html',
+                title='Scatterplot: Amount of Students per Staff Member')
 
     # reads df from file
     df = pd.read_csv('../university_ranking.csv', index_col=0)

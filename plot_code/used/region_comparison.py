@@ -48,7 +48,7 @@ def main():
             '2018': list2018}
 
     source = ColumnDataSource(data=data)
-    p = figure(x_range=regions_abbrv, y_range=(0, 400), plot_height=250, 
+    p = figure(x_range=regions_abbrv, y_range=(0, 400), plot_height=250,
                plot_width=1000, title="University count per region per year",
                toolbar_location='below', tools="pan,wheel_zoom,box_zoom,reset")
 

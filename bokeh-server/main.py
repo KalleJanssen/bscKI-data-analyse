@@ -157,7 +157,8 @@ def update_correlation():
                                                           'years',
                                                           'color',
                                                           'university_name']])
-    bfs_line_source.data = bfs_line_source.from_df(line_data[['x', 'y', 'formula']])
+    bfs_line_source.data = bfs_line_source.from_df(line_data[['x', 'y',
+                                                              'formula']])
     correlation_hover.tooltips = [('Year', '@years'),
                                   ('Ranking', '@ranking'),
                                   ('university', '@university_name'),
@@ -171,12 +172,12 @@ def update_correlation():
 def get_data_gdp_correlation(variable):
 
     input_converter = {'Ranking': 'ranking',
-                        'Overall score': 'score_overall',
-                        'Citation score': 'score_citation',
-                        'Industry score': 'score_industry',
-                        'Int. outlook score': 'score_int_outlook',
-                        'Research score': 'score_research',
-                        'Teaching score': 'score_teaching'}
+                       'Overall score': 'score_overall',
+                       'Citation score': 'score_citation',
+                       'Industry score': 'score_industry',
+                       'Int. outlook score': 'score_int_outlook',
+                       'Research score': 'score_research',
+                       'Teaching score': 'score_teaching'}
     variable = input_converter[variable]
     df = pd.read_csv('bokeh-server/static/gdp_avg_score.csv')
 
@@ -209,10 +210,10 @@ def update_gdp_correlation():
     data, line_data = get_data_gdp_correlation(variable)
     gdp_corr_source.data = gdp_corr_source.from_df(data[['gdp', 'variable',
                                                          'country']])
-    gdp_bfs_line_source.data = gdp_bfs_line_source.from_df(line_data[['x', 'y',
-                                                             'formula']])
-    gdp_correlation.title.text = ('Correlation between gdp (2014) and average ' +
-                                  variable.lower())
+    gdp_bfs_line_source.data = (gdp_bfs_line_source
+                                .from_df(line_data[['x', 'y', 'formula']]))
+    gdp_correlation.title.text = ('Correlation between gdp (2014)' +
+                                  'and average ' + variable.lower())
     gdp_hover.tooltips = [('Country', '@country'),
                           (variable, '@variable'),
                           ('GDP', '@gdp')]
@@ -264,9 +265,8 @@ def update_histogram():
 
     year = int(histogram_year_select.value)
     arr_hist, edges, mean, median, mode = get_data_histogram(year)
-    histogram_mean_median.text = 'Mean: {0}\nMedian: {1}\nMode: {2}'.format(mean,
-                                                                            median,
-                                                                            mode)
+    histogram_mean_median.text = ('Mean: {0}\nMedian: {1}\nMode: {2}'
+                                  .format(mean, median, mode))
     df = pd.DataFrame({'score_overall': arr_hist,
                        'left': edges[:-1],
                        'right': edges[1:]})
@@ -389,8 +389,8 @@ gdp_correlation.line('x', 'y', line_width=2, color='black',
 # # # # # # # # # # # # # # # # #
 pyramid_year_select = Select(value='2016', options=['2016', '2017', '2018'])
 pyramid_xaxis_slider = Slider(start=20, end=200, step=1, value=20,
-                              title='No. of universities', orientation='vertical',
-                              height=400)
+                              title='No. of universities',
+                              orientation='vertical', height=400)
 pyramid_source = ColumnDataSource(data=dict(ranking=[], male=[], female=[],
                                   university_name=[], midfemale=[],
                                   midmale=[]))

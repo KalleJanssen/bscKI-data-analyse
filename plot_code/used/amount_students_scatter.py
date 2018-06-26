@@ -23,7 +23,7 @@ def main():
                 title='Scatterplot: Amount of Students')
 
     # reads df from file
-    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = pd.read_csv('../../university_ranking.csv', index_col=0)
 
     colormap = {2016: 'red',
                 2017: 'green',

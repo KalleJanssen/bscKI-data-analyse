@@ -6,21 +6,24 @@ from sklearn.model_selection import train_test_split
 def male_female_fill(df):
 
     # columns of interest for predicting male female split
-    df.loc[df.male.isnull(), 'male'] = df.groupby('country').male.transform('mean')
+    df.loc[df.male.isnull(), 'male'] = (df.groupby('country')
+                                        .male.transform('mean'))
     df.male = df.male.astype(int)
     df['female'] = 100 - df['male']
 
     return df
 
+
 def pct_intl_student_fill(df):
 
-    df['pct_intl_student'] = df['pct_intl_student'].str.replace(r'%', r'.0').astype('float') / 100.0
+    df['pct_intl_student'] = (df['pct_intl_student'].str.replace(r'%', r'.0')
+                              .astype('float') / 100.0)
     df['pct_intl_student'] = df['pct_intl_student'].fillna(0)
-    
+
     return df
 
-def score_industry_fill(df):
 
+def score_industry_fill(df):
 
     coi = ['ranking',
            'score_overall',

@@ -5,6 +5,7 @@ from selenium import webdriver
 import time
 import country_converter as coco
 
+
 def retrieve_data():
     stats = []
     scores = []
@@ -15,8 +16,10 @@ def retrieve_data():
     for j in range(6, 9):
 
         # creates url to be used
-        url = ('https://www.timeshighereducation.com/world-university-rankings/201'
-               + str(j) + '/world-ranking#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/stats')
+        url = ('https://www.timeshighereducation.com/' +
+               'world-university-rankings/201'
+               + str(j) + '/world-ranking#!/page/0/length/-1/sort_by/' +
+               'rank/sort_order/asc/cols/stats')
         browser.get(url)
         time.sleep(3)
         # converts html file into soup
@@ -29,7 +32,7 @@ def retrieve_data():
         for table_row in table.select('tr'):
             cells = table_row.findAll('td')
             if len(cells) > 0:
-                
+
                 ranking = i
 
                 name_country = cells[1]
@@ -50,11 +53,14 @@ def retrieve_data():
                               fem_mal_ratio,
                               '201' + str(j)))
 
-    # same as above, had to separate into 2 for loops because it didn't work otherwise
+    # same as above, had to separate into 2 for loops because
+    # it didn't work otherwise
     for j in range(6, 9):
 
-        url = ('https://www.timeshighereducation.com/world-university-rankings/201' +
-               str(j) + '/world-ranking#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/scores')
+        url = ('https://www.timeshighereducation.com/' +
+               'world-university-rankings/201' +
+               str(j) + '/world-ranking#!/page/0/length/-1/sort_by/rank/' +
+               'sort_order/asc/cols/scores')
         browser.get(url)
         time.sleep(3)
         soup = BeautifulSoup(browser.page_source, 'html.parser')
@@ -103,11 +109,14 @@ def retrieve_data():
                                              'score_industry',
                                              'score_int_outlook',
                                              'year'])
-    # merges 2 data-frames based on university name, country and year into one data-frame
+    # merges 2 data-frames based on university name, country
+    # and year into one data-frame
     df = ranking_df.merge(score_df, on=['university_name', 'country', 'year'])
 
-    df[['female', 'male']] = df.pop('fem_mal_ratio').str.split(' : ', expand=True)
-    df['no_student'] = df['no_student'].str.strip('" ').str.replace(',', '').astype(int)
+    df[['female', 'male']] = (df.pop('fem_mal_ratio').str
+                              .split(' : ', expand=True))
+    df['no_student'] = (df['no_student'].str.strip('" ').str
+                        .replace(',', '').astype(int))
     cols = ['score_overall',
             'score_teaching',
             'score_research',
@@ -127,21 +136,22 @@ def main():
 
     # reads df from file
     df = pd.read_csv('../university_ranking_unf.csv', index_col=0)
-    
+
     # fills missing data with proper data using ml and means
     df = fill.male_female_fill(df)
     df = fill.pct_intl_student_fill(df)
     df = fill.score_overall_fill(df)
     df = fill.score_industry_fill(df)
-    
+
     # adds continent column
     country_list = df['country'].tolist()
     converter = coco.CountryConverter()
     continents = converter.convert(names=country_list, to='continent')
     df['continent'] = continents
     df['region'] = converter.convert(names=country_list, to='UNregion')
-    
+
     df.to_csv('../university_ranking.csv')
+
 
 if __name__ == "__main__":
     main()

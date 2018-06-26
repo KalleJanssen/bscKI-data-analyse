@@ -9,7 +9,7 @@ from bokeh.models import Panel, ColumnDataSource, HoverTool
 def main():
 
     # reads df from file
-    df = pd.read_csv('university_ranking.csv', index_col=0)
+    df = pd.read_csv('../../university_ranking.csv', index_col=0)
 
     # splits data-frame
     df2018 = df.loc[df['year'] == 2018]
