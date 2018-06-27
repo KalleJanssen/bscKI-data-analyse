@@ -39,15 +39,58 @@
     background-size:     cover;
 }
 </style>
+
 <style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
-.w3-bar-block .w3-bar-item {padding:20px}
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans);
+body {
+    font-family: 'Noto Sans'
+}
+.w3-bar-block .w3-bar-item {
+        padding:20px
+    }
+
+.headers  {
+    text-shadow: 0 0 10px #fff,
+            0 0 20px #fff,
+            0 0 30px #fff,
+            0 0 40px #BC0031,
+            0 0 70px #BC0031,
+            0 0 80px #BC0031,
+            0 0 100px #BC0031,
+            0 0 150px #BC0031;
+}
+#title {
+    color: #751B68;
+}
+
+.headers  {
+    font-weight: bold;
+}
+.list li {
+    font-size: ;
+}
+
+.headers 
 </style>
 <body>
 
-<div class="w3-center w3-padding-16">Project of Daniel, Anthony, Wijnand and Kalle</div>
-<div class="w3-center w3-padding-16">This is the static version, to run the interactive version please follow the steps below.</div>
-<div class="w3-center w3-padding-16">Open terminal, Enter 'git clone' followed by 'git@github.com:DanielPerezJensen/bscKI-data-analyse.git', go to this directory, enter 'bokeh serve bokeh-server', copy and paste the url in your browser.</div>
+<div class="w3-center w3-padding-16"><h3 id='title'>Project of Daniel, Anthony, Wijnand and Kalle</h2></div>
+<div class="w3-center w3-padding-16"><h2 class='headers'>This is the static version, to run the interactive version please follow the steps below:</h3></div>
+
+<div class='list' style="width: 35%; margin: 0 auto;">
+    <ol>
+        <li>Install bokeh: pip install -U bokeh --user</li>
+        <ul>
+            <li>Be aware bokeh needs to be of version 13.0 or higher for all elements on the bokeh run server to work.</li>
+        </ul>
+        <li>Open your terminal</li>
+        <li>Enter: 'git clone git@github.com:DanielPerezJensen/bscKI-data-analyse.git'</li>
+        <li>cd bscKI-data-analyse</li>
+        <li>Enter: bokeh serve bokeh-server</li>
+        <li>In your webbrowser navigate to: http://localhost:<**PORT**>/bokeh-server</li>
+        <li>The port might be different on your machine, look in your shell to see the exact link.</li>
+    </ol>
+</div>
 
   <div class="w3-row-padding w3-padding-16 w3-center" id="food">
     <div class="w3-center w3-padding-16"><b>What universities/countries/regions/continents are the most consistent through the years, and which regions are least consistent?</b></div>
