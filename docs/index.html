@@ -12,7 +12,13 @@
 
 .column {
     float: left;
-    width: 25%;
+    width: 50%;
+    padding: 5px;
+}
+
+.column1 {
+    float: left;
+    width: 100%;
     padding: 5px;
 }
 
@@ -40,77 +46,141 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
 <body>
 
 <div class="w3-center w3-padding-16">Project of Daniel, Anthony, Wijnand and Kalle</div>
+<div class="w3-center w3-padding-16">This is the static version, to run the interactive version please follow the steps below.</div>
+<div class="w3-center w3-padding-16">Open terminal, Enter 'git clone' followed by 'git@github.com:DanielPerezJensen/bscKI-data-analyse.git', go to this directory, enter 'bokeh serve bokeh-server', copy and paste the url in your browser.</div>
 
-  <!-- First Photo Grid-->
   <div class="w3-row-padding w3-padding-16 w3-center" id="food">
+    <div class="w3-center w3-padding-16"><b>What universities/countries/regions/continents are the most consistent through the years, and which regions are least consistent?</b></div>
     <div class="row">
       <div class="column">
         <img src="images/count_uni_amer.png" style="width:100%">
       </div>
       <div class="column">
-        <img src="images/data1.png" style="width:100%">
-      </div>
-      <div class="column">
-        <img src="images/pct_int_students.png" style="width:100%">
-        <img src="images/male_students.png" style="width:100%">
-        <img src="images/no_students.png" style="width:100%">
-        <img src="images/students_staff.png" style="width:100%">
-      </div>
-      <div class="column">
-        <img src="images/male_female_2016.png" style="width:100%">
-        <img src="images/male_female_2017.png" style="width:100%">
-        <img src="images/male_female_2018.png" style="width:100%">
+        <img src="images/data_amer.png" style="width:80%">
       </div>
     </div>
     <div class="row">
       <div class="column">
-        <img src="images/count_uni_world.png" style="width:110%">
+        <img src="images/count_uni_eur.png" style="width:100%">
       </div>
       <div class="column">
-        <img src="images/data2.png" style="width:100%">
-      </div>
-      <div class="column">
-        <img src="images/scores_2016.png" style="width:100%">
-        <img src="images/scores_2017.png" style="width:100%">
-        <img src="images/scores_2018.png" style="width:100%">
-      </div>
-      <div class="column">
-        <img src="images/male_female_2016.png" style="width:100%">
-        <img src="images/male_female_2017.png" style="width:100%">
-        <img src="images/male_female_2018.png" style="width:100%">
+        <img src="images/data_euro.png" style="width:80%">
       </div>
     </div>
     <div class="row">
       <div class="column">
-        <img src="images/gdp_ranking.png" style="width:130%">
-        <img src="images/gdp_overall.png" style="width:130%">
-        <img src="images/gdp_citation.png" style="width:130%">
-        <img src="images/gdp_industry.png" style="width:130%">
-        <img src="images/gdp_outlook.png" style="width:130%">
-        <img src="images/gdp_research.png" style="width:130%">
-        <img src="images/gdp_teaching.png" style="width:130%">
+        <img src="images/count_uni_asia.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/data_asia.png" style="width:80%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/count_uni_ocea.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/data_ocea.png" style="width:80%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/count_uni_afr.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/data_afri.png" style="width:80%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column1">
+        <img src="images/count_uni_world.png" style="width:100%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/worldmap_2016.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/worldmap_2017.png" style="width:100%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column1">
+        <img src="images/worldmap_2018.png" style="width:100%">
       </div>
     </div>
   </div>
-<html>
 
+  <div class="w3-row-padding w3-padding-16 w3-center" id="food">
+    <div class="w3-center w3-padding-16"><b>Are there any noteworthy differences/anomalies in the top 200 universities of the world?</b></div>
+    <div class="row">
+      <div class="column">
+        <img src="images/pct_int_students.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/male_students.png" style="width:100%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/no_students.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/students_staff.png" style="width:100%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/male_female_2016.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/male_female_2017.png" style="width:100%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/male_female_2018.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/scores_2016.png" style="width:100%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/scores_2017.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/scores_2018.png" style="width:100%">
+      </div>
+    </div>
 
-  <img src="/images/count_uni_amer.png">
-  <img src="/images/count_uni_world.png">
-  <img src="/images/dat1.png">
-  <img src="/images/data2.png">
-  <img src="/images/male_female_2016.png">
-  <img src="/images/male_female_2017.png">
-  <img src="/images/male_female_2018.png">
-  <img src="/images/male_students.png">
-  <img src="/images/no_students.png">
-  <img src="/images/pct_int_students.png">
-  <img src="/images/scores_2016.png">
-  <img src="/images/scores_2017.png">
-  <img src="/images/scores_2018.png">
-  <img src="/images/students_staff.png">
-  <img src="/images/worldmap_2016.png">
-  <img src="/images/worldmap_2017.png">
-  <img src="/images/worldmap_2018.png">
-
+    <div class="row">
+      <div class="column">
+        <img src="images/gdp_ranking.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/gdp_score.png" style="width:100%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/gdp_citation.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/gdp_industry.png" style="width:100%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/gdp_outlook.png" style="width:100%">
+      </div>
+      <div class="column">
+        <img src="images/gdp_research.png" style="width:100%">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <img src="images/gdp_teaching.png" style="width:100%">
+      </div>
+  </div>
 </html>
