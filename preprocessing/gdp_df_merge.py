@@ -8,6 +8,12 @@ def main():
     df_ranking = pd.read_csv('../university_ranking.csv', index_col=0)
     countries = list(set(df_gdp['country'].tolist()))
 
+    years = [2016, 2017, 2018]
+
+    # gets top 800 for every year and puts into list
+    df_list = [df_ranking.loc[df_ranking['year'] == year].head(800) for year in years]
+    df_ranking = df_list[0].append(df_list[1].append(df_list[2]))
+
     rows_list = []
     for country in countries:
 

@@ -186,7 +186,7 @@ def get_data_gdp_correlation(variable):
     data = data[coi]
     data.rename(columns={variable: 'variable'}, inplace=True)
     m, b = best_fit_line(data['gdp'], data['variable'])
-    x = [i for i in range(18000)]
+    x = [i for i in range(4800)]
     y = [m * x + b for x in range(len(x))]
     line_data = pd.DataFrame()
     line_data['x'] = x
@@ -377,7 +377,7 @@ gdp_correlation = figure(tools=[gdp_hover, 'save'],
                          plot_width=500,
                          plot_height=386,
                          toolbar_location='above')
-gdp_correlation.xaxis.axis_label = 'GDP in billions'
+gdp_correlation.xaxis.axis_label = 'GDP in billions (US and China excluded)'
 gdp_correlation.yaxis.axis_label = ''
 gdp_correlation.scatter('gdp', 'variable', source=gdp_corr_source,
                         name='scatter_gdp')
