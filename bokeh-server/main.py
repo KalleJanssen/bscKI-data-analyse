@@ -63,13 +63,13 @@ def get_data_bar_chart(continent):
 
     df = pd.read_csv('bokeh-server/static/university_ranking.csv', index_col=0)
 
-    df = df.loc[df['continent'] == continent]
-
-    regions = list(set(df['region'].tolist()))
-
     years = [2016, 2017, 2018]
 
-    dfs = [df.loc[df['year'] == year] for year in years]
+    year_dfs = [df.loc[df['year'] == year].head(800) for year in years]
+
+    dfs = [df.loc[df['continent'] == continent].head(800) for df in year_dfs]
+
+    regions = list(set(dfs[0]['region'].tolist()))
 
     # all continents counter and put into dictionaries
     count_2016 = dict(Counter(dfs[0]['region'].tolist()))
@@ -345,7 +345,7 @@ correlation_hover = HoverTool(
 # scatterplot + best fit line for correlation between variable and ranking
 correlation = figure(tools=[correlation_hover, 'save'],
                      title='',
-                     plot_width=500,
+                     plot_width=550,
                      plot_height=450,
                      toolbar_location='above')
 correlation.xaxis.axis_label = "International Ranking"
@@ -400,11 +400,11 @@ pyramid_hover = HoverTool(tooltips=[('Ranking', '@ranking'),
                                     ('University', '@university_name')])
 pyramid_left = figure(title='male',
                       x_range=(100, 0), tools=[pyramid_hover, 'save'],
-                      y_range=(0, 200), plot_height=420, plot_width=180)
+                      y_range=(0, 200), plot_height=420, plot_width=225)
 pyramid_right = figure(title='female',
                        x_range=(0, 100), tools=[pyramid_hover, 'save'],
                        y_range=(0, 200), plot_height=420,
-                       plot_width=180)
+                       plot_width=225)
 
 pyramid_right.yaxis.visible = False
 
