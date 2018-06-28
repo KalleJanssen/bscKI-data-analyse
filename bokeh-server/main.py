@@ -375,7 +375,7 @@ gdp_hover = HoverTool(
 gdp_correlation = figure(tools=[gdp_hover, 'save'],
                          title='',
                          plot_width=500,
-                         plot_height=386,
+                         plot_height=436,
                          toolbar_location='above')
 gdp_correlation.xaxis.axis_label = 'GDP in billions (US and China excluded)'
 gdp_correlation.yaxis.axis_label = ''
@@ -442,7 +442,7 @@ histogram_source = ColumnDataSource(data=dict(score_overall=[],
                                               right=[]))
 histogram_hover = HoverTool(tooltips=[('Score', '@left - @right'),
                                       ('# of universities', '@score_overall')])
-histogram_figure = figure(plot_width=500, plot_height=400,
+histogram_figure = figure(plot_width=500, plot_height=450,
                           x_axis_label='Overall grade',
                           y_axis_label='Amount of Universities',
                           tools=[histogram_hover, 'save'],

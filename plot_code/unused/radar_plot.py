@@ -48,9 +48,9 @@ def radar_plot(df, year):
     df = df.copy()
 
     p = figure(title="Radar plot of 5 highest ranked universities in " +
-               str(year), x_range=(0, 1.24))
+               str(year), x_range=(0, 1.24), tools=['save'])
     t = figure(title="Radar plot of 5 lowest ranked universities in " +
-               str(year), x_range=(0, 1.24))
+               str(year), x_range=(0, 1.24), tools=['save'])
 
     text = ['No. of Students per staff member', 'Male',
             '% Int. Students', 'No. of Students', '']
@@ -99,7 +99,7 @@ def radar_plot_avg(df, year):
     df = df.copy()
 
     p = figure(title="Average radar plot of all ranked universities in " +
-               str(year), x_range=(0, 1.24))
+               str(year), x_range=(0, 1.24), tools=['save'])
 
     text = ['No. of Students per staff member', 'Male',
             '% Int. Students', 'No. of Students', '']
