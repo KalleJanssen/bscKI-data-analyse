@@ -11,9 +11,9 @@ from bokeh.transform import dodge
 
 def main():
 
-    output_file('../docs/region_comparision.html')
+    output_file('docs/region_comparision.html')
 
-    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = pd.read_csv('../../university_ranking.csv', index_col=0)
 
     years = [2016, 2017, 2018]
 

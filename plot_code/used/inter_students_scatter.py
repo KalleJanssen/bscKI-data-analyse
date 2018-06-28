@@ -24,11 +24,11 @@ def mse(y, y_pred):
 def main():
 
     # file where .html should be saved
-    output_file('../docs/inter_students_scatter.html',
+    output_file('docs/inter_students_scatter.html',
                 title='Scatterplot: International Students')
 
     # reads df from file
-    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = pd.read_csv('../../university_ranking.csv', index_col=0)
 
     colormap = {2016: 'red',
                 2017: 'green',

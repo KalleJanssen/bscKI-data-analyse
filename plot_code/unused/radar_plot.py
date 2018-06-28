@@ -16,7 +16,8 @@ theta += np.pi/2
 
 def normalize(df, column):
     # normalizes data in column based on min-max method
-    return ((df[column] - df[column].min()) / (df[column].max() - df[column].min()))
+    return (((df[column] - df[column].min()) /
+             (df[column].max() - df[column].min())))
 
 
 def unit_poly_verts(theta, centre):

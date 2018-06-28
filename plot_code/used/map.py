@@ -88,10 +88,7 @@ for df in dfs:
             showframe=False,
             showcoastlines=False,
             projection=dict(
-                type='Mercator'
-            )
-        )
-    )
+                type='Mercator')))
 
     fig = dict(data=data, layout=layout)
     plotly.offline.plot(fig, validate=False,

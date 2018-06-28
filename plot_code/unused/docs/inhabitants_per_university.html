@@ -1,0 +1,83 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+      <meta charset="utf-8">
+      <title>Bokeh Plot</title>
+      
+      
+        
+          
+        <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.css" type="text/css" />
+        
+        
+          
+        <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.js"></script>
+        <script type="text/javascript">
+            Bokeh.set_log_level("info");
+        </script>
+        
+      
+      
+    
+  </head>
+  
+  
+  <body>
+    
+      
+        
+          
+          
+            <div class="bk-root" id="13e2f347-04e9-4d61-9035-2788af805feb"></div>
+          
+        
+      
+      
+        <script type="application/json" id="2b0c6d37-eaf3-4e58-9bf5-f765458be5cc">
+          {"76f3016e-6b57-40cb-a237-1bb471485dfb":{"roots":{"references":[{"attributes":{"callback":null,"end":50},"id":"9d6a7552-24d3-4378-8b47-d1e19f067134","type":"Range1d"},{"attributes":{},"id":"a356093a-a393-46da-bf7b-1430be171f0f","type":"LinearScale"},{"attributes":{"axis_label":"Amount of inhabitants per university (x1m)","formatter":{"id":"fc30c485-912e-40ba-97b1-335b21bbc399","type":"BasicTickFormatter"},"plot":{"id":"68755b84-bde7-4fb1-8414-d7f41e09d424","subtype":"Figure","type":"Plot"},"ticker":{"id":"18dabeed-f6cf-4396-a267-6aca5c0fffa8","type":"BasicTicker"}},"id":"17f47a7c-9f57-4e72-803a-cf6f85f28984","type":"LinearAxis"},{"attributes":{},"id":"7a68e9dc-ad96-4ac1-b900-13eff31b76db","type":"CategoricalTickFormatter"},{"attributes":{"axis_label":"Continents","formatter":{"id":"7a68e9dc-ad96-4ac1-b900-13eff31b76db","type":"CategoricalTickFormatter"},"plot":{"id":"68755b84-bde7-4fb1-8414-d7f41e09d424","subtype":"Figure","type":"Plot"},"ticker":{"id":"c59869d0-3976-4307-a2ea-4aa9f4b765b0","type":"CategoricalTicker"}},"id":"7a507d0a-f969-4b7e-8c58-552ee5885dbd","type":"CategoricalAxis"},{"attributes":{"plot":null,"text":"Number of inhabitants per continent per university"},"id":"4fa00c36-779f-4606-9b99-18c3b898c9eb","type":"Title"},{"attributes":{},"id":"303d8549-bf21-4563-9f71-24e89d8a3a5b","type":"UnionRenderers"},{"attributes":{},"id":"c59869d0-3976-4307-a2ea-4aa9f4b765b0","type":"CategoricalTicker"},{"attributes":{"range":{"id":"e166de1f-ca48-40b9-a00b-df1607302151","type":"FactorRange"}},"id":"089b49d9-e9b8-4c42-936e-9a22208bf1e4","type":"Dodge"},{"attributes":{},"id":"060ea5e6-7991-4612-a26a-060ef1d298a2","type":"Selection"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"68755b84-bde7-4fb1-8414-d7f41e09d424","subtype":"Figure","type":"Plot"},"ticker":{"id":"c59869d0-3976-4307-a2ea-4aa9f4b765b0","type":"CategoricalTicker"}},"id":"bb74c9e1-0de7-456c-a369-6ab0501ce201","type":"Grid"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"58c087e9-60c7-471b-afa8-6b4257f38408","type":"HoverTool"}]},"id":"448d2180-6156-4dca-a38a-bf9ec28d24ba","type":"Toolbar"},{"attributes":{},"id":"18dabeed-f6cf-4396-a267-6aca5c0fffa8","type":"BasicTicker"},{"attributes":{"dimension":1,"plot":{"id":"68755b84-bde7-4fb1-8414-d7f41e09d424","subtype":"Figure","type":"Plot"},"ticker":{"id":"18dabeed-f6cf-4396-a267-6aca5c0fffa8","type":"BasicTicker"}},"id":"e0fea12e-0c75-4679-a59b-2afc580c3ab3","type":"Grid"},{"attributes":{"callback":null,"factors":["Africa","Asia","America","Europe","Oceania"],"range_padding":0.1},"id":"e166de1f-ca48-40b9-a00b-df1607302151","type":"FactorRange"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"value":"#1f77b4"},"line_alpha":{"value":0.1},"line_color":{"value":"#1f77b4"},"top":{"field":"20182"},"width":{"value":0.2},"x":{"field":"continents","transform":{"id":"089b49d9-e9b8-4c42-936e-9a22208bf1e4","type":"Dodge"}}},"id":"bf8e5d5b-e5ff-4eab-b971-3165467b21f3","type":"VBar"},{"attributes":{"callback":null,"renderers":"auto","tooltips":[["Inhabitants","@listinhabitants"],["Amount of universities","@listuniversities"],["Number of inhabitants per university","@20183"]]},"id":"58c087e9-60c7-471b-afa8-6b4257f38408","type":"HoverTool"},{"attributes":{},"id":"9081d50d-7fd8-44c2-8088-0f54ae826fe4","type":"CategoricalScale"},{"attributes":{"fill_color":{"value":"#0000FF"},"line_color":{"value":"#0000FF"},"top":{"field":"20182"},"width":{"value":0.2},"x":{"field":"continents","transform":{"id":"089b49d9-e9b8-4c42-936e-9a22208bf1e4","type":"Dodge"}}},"id":"b5f12340-95cd-4c0c-ad35-4a01d8344dcb","type":"VBar"},{"attributes":{"callback":null,"data":{"20182":[45.04185185185185,12.221002754820937,4.0062359999999995,1.7591642857142857,0.9279302325581397],"20183":["45.041.852","12.221.003","4.006.236","1.759.164","927.930"],"continents":["Africa","Asia","America","Europe","Oceania"],"listinhabitants":["1.216.130.000","4.436.224.000","1.001.559.000","738.849.000","39.901.000"],"listuniversities":[27,363,250,420,43]},"selected":{"id":"060ea5e6-7991-4612-a26a-060ef1d298a2","type":"Selection"},"selection_policy":{"id":"303d8549-bf21-4563-9f71-24e89d8a3a5b","type":"UnionRenderers"}},"id":"73f08cee-2e74-4d6c-a6ef-216d87033607","type":"ColumnDataSource"},{"attributes":{"data_source":{"id":"73f08cee-2e74-4d6c-a6ef-216d87033607","type":"ColumnDataSource"},"glyph":{"id":"b5f12340-95cd-4c0c-ad35-4a01d8344dcb","type":"VBar"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"bf8e5d5b-e5ff-4eab-b971-3165467b21f3","type":"VBar"},"selection_glyph":null,"view":{"id":"825a2699-eff9-4caf-b060-7b55908876de","type":"CDSView"}},"id":"2f1e39d9-516f-4c23-a2be-1c3018d81613","type":"GlyphRenderer"},{"attributes":{"source":{"id":"73f08cee-2e74-4d6c-a6ef-216d87033607","type":"ColumnDataSource"}},"id":"825a2699-eff9-4caf-b060-7b55908876de","type":"CDSView"},{"attributes":{"below":[{"id":"7a507d0a-f969-4b7e-8c58-552ee5885dbd","type":"CategoricalAxis"}],"left":[{"id":"17f47a7c-9f57-4e72-803a-cf6f85f28984","type":"LinearAxis"}],"plot_height":500,"renderers":[{"id":"7a507d0a-f969-4b7e-8c58-552ee5885dbd","type":"CategoricalAxis"},{"id":"bb74c9e1-0de7-456c-a369-6ab0501ce201","type":"Grid"},{"id":"17f47a7c-9f57-4e72-803a-cf6f85f28984","type":"LinearAxis"},{"id":"e0fea12e-0c75-4679-a59b-2afc580c3ab3","type":"Grid"},{"id":"2f1e39d9-516f-4c23-a2be-1c3018d81613","type":"GlyphRenderer"}],"title":{"id":"4fa00c36-779f-4606-9b99-18c3b898c9eb","type":"Title"},"toolbar":{"id":"448d2180-6156-4dca-a38a-bf9ec28d24ba","type":"Toolbar"},"toolbar_location":null,"x_range":{"id":"e166de1f-ca48-40b9-a00b-df1607302151","type":"FactorRange"},"x_scale":{"id":"9081d50d-7fd8-44c2-8088-0f54ae826fe4","type":"CategoricalScale"},"y_range":{"id":"9d6a7552-24d3-4378-8b47-d1e19f067134","type":"Range1d"},"y_scale":{"id":"a356093a-a393-46da-bf7b-1430be171f0f","type":"LinearScale"}},"id":"68755b84-bde7-4fb1-8414-d7f41e09d424","subtype":"Figure","type":"Plot"},{"attributes":{"use_scientific":false},"id":"fc30c485-912e-40ba-97b1-335b21bbc399","type":"BasicTickFormatter"}],"root_ids":["68755b84-bde7-4fb1-8414-d7f41e09d424"]},"title":"Bokeh Application","version":"0.13.0"}}
+        </script>
+        <script type="text/javascript">
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('2b0c6d37-eaf3-4e58-9bf5-f765458be5cc').textContent;
+                  var render_items = [{"docid":"76f3016e-6b57-40cb-a237-1bb471485dfb","roots":{"68755b84-bde7-4fb1-8414-d7f41e09d424":"13e2f347-04e9-4d61-9035-2788af805feb"}}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        embed_document(root);
+                        clearInterval(timer);
+                      }
+                      attempts++;
+                      if (attempts > 100) {
+                        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing")
+                        clearInterval(timer);
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+  </body>
+  
+</html>

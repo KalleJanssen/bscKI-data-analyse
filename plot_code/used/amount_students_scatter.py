@@ -19,7 +19,7 @@ def best_fit_line(xs, ys):
 def main():
 
     # file where .html should be saved
-    output_file('../docs/amount_students_scatter.html',
+    output_file('docs/amount_students_scatter.html',
                 title='Scatterplot: Amount of Students')
 
     # reads df from file

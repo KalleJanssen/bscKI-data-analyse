@@ -98,12 +98,12 @@ def main():
     plot2017.add_tools(hover2017)
     plot2018.add_tools(hover2018)
 
-    layout = layout([plot2016, plot2017, plot2018])
+    p = layout([plot2016, plot2017, plot2018])
 
     output_file('docs/grade-graphs.html')
 
     # Show the plot
-    show(layout)
+    show(p)
 
 
 if __name__ == "__main__":

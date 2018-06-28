@@ -11,9 +11,9 @@ from bokeh.transform import dodge
 def main():
 
     # reads df from file
-    df = pd.read_csv('../university_ranking.csv', index_col=0)
+    df = pd.read_csv('../../university_ranking.csv', index_col=0)
 
-    output_file('../../docs/bar-chart-continent-split.html')
+    output_file('docs/bar-chart-continent-split.html')
 
     # splits data-frame into top 800 data-frames per year
     df2016 = df.loc[df['year'] == 2016].head(800)
