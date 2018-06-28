@@ -15,7 +15,7 @@ from bokeh.models import Rect, CategoricalAxis, LinearAxis, GlyphRenderer
 
 def main():
 
-    df = pd.read_csv('university_ranking.csv', index_col=0)
+    df = pd.read_csv('../../university_ranking.csv', index_col=0)
 
     df2016 = df.loc[df['year'] == 2016].head(200)
     df2017 = df.loc[df['year'] == 2017].head(200)
