@@ -1,0 +1,87 @@
+\DeclareTranslation{dutch}{tutor}{Tutor}
+\DeclareTranslation{english}{tutor}{Tutor}
+
+\DeclareTranslation{dutch}{of}{van}
+\DeclareTranslation{english}{of}{of}
+
+\DeclareTranslation{dutch}{lecturer}{Docent}
+\DeclareTranslation{english}{lecturer}{Lecturer}
+
+\DeclareTranslation{dutch}{group}{Practicumgroep}
+\DeclareTranslation{english}{group}{Group}
+
+\DeclareTranslation{dutch}{student}{Student}
+\DeclareTranslation{english}{student}{Student}
+
+\DeclareTranslation{dutch}{students}{Studenten}
+\DeclareTranslation{english}{students}{Students}
+
+\DeclareTranslation{dutch}{course}{Cursus}
+\DeclareTranslation{english}{course}{Course}
+
+\DeclareTranslation{dutch}{course_id}{Vakcode}
+\DeclareTranslation{english}{course_id}{Course code}
+
+\DeclareTranslation{dutch}{uva_logo}{logoUvA_nl}
+\DeclareTranslation{english}{uva_logo}{logoUvA_en}
+
+\newcommand*{\assignment}[1]{\gdef\@assignment{#1}}
+\newcommand*{\@assignment}{$\backslash assignment\{\}$ is unset}
+
+\newcommand*{\assignmenttype}[1]{\gdef\@assignmenttype{#1}}
+\newcommand*{\@assignmenttype}{$\backslash assignmenttype\{\}$ is unset}
+
+\newcommand*{\tutor}[1]{\gdef\@tutor{#1}}
+\newcommand*{\@tutor}{}
+
+\newcommand*{\mentor}[1]{\gdef\@mentor{#1}}
+\newcommand*{\@mentor}{}
+
+\newcommand*{\group}[1]{\gdef\@group{#1}}
+\newcommand*{\@group}{}
+
+\newcommand*{\docent}[1]{\gdef\@docent{#1}}
+\newcommand*{\@docent}{}
+
+\newcommand*{\course}[1]{\gdef\@course{#1}}
+\newcommand*{\@course}{}
+
+\newcommand*{\courseid}[1]{\gdef\@courseid{#1}}
+\newcommand*{\@courseid}{}
+
+\newcounter{authorcount}
+\setcounter{authorcount}{0}
+
+\newcounter{uvacount}
+\setcounter{uvacount}{0}
+
+\newcommand\setprefix[2]{\expandafter\def\csname#1\endcsname{#2}}
+\newcommand\getprefix[1]{\csname#1\endcsname}
+
+\NewDocumentCommand\authors{>{\SplitList{;}}m}{
+    \ProcessList{#1}{ \addauthor }
+}
+\newcommand\addauthor[1]{
+    \stepcounter{authorcount}
+    \setprefix{author\arabic{authorcount}}{#1}
+}
+\renewcommand{\author}[1]{
+	\addauthor{#1}
+}
+\NewDocumentCommand\uvanetids{>{\SplitList{;}}m}{
+    \ProcessList{#1}{ \adduvanetid }
+}
+\newcommand\adduvanetid[1]{
+    \stepcounter{uvacount}
+    \setprefix{uva\arabic{uvacount}}{#1}
+}
+\newcommand\uvanetid[1]{
+	\adduvanetid{#1}
+}
+
+\newcommand{\andreas}[4]{
+    \begin{scope}[shift={(#1,#2)},rotate=45,scale=#3]
+        \fill[#4] (0,0) -- (0,1) -- (3,1) -- (3,0);
+        \fill[#4] (1,-1) -- (2,-1) -- (2,2) -- (1,2);``
+    \end{scope}
+}
